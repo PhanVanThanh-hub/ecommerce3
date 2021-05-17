@@ -1,0 +1,83 @@
+{%  extends 'admin/mainadmin.html' %}
+
+{% block content %}
+
+{%  include 'admin/status.html' %}
+
+<br>
+<div class="container">
+		 
+	<ul class="list-group">
+		{% for room in room%}
+		<li class="list-group-item d-flex justify-content-between align-items-center">
+		  <a href="{% url 'chat:chat' room.nameRoom %}">{{room.nameRoom}}</a> 
+		  <span class="badge badge-primary badge-pill">14</span>
+		</li>
+		{% endfor %} 
+	</ul>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<h5>CUSTOMERS:</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Customer</a>
+			<table class="table table-bordered">
+				<tr>
+					<th></th>
+					<th>Customer</th>
+					<th>Phone</th>
+					<th>Email</th>
+					<th>Date Create</th>
+				</tr>
+				{% for customer in customer %}
+				<tr>
+					<th><a href="{% url 'dashboard:customer' customer.id %}">View</a> </th>
+					<th>{{customer.name}}</th>
+					<th>{{customer.phone}}</th>
+					<th>{{customer.email}}</th>
+					<th>{{customer.date_created}}</th>
+				</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+	<div class="col-md-12">
+		<h5>BOUGHT</h5>
+		<hr>
+		<form method="get">
+			{{myFilter.form}}
+			<button class="btn btn-primary" type="submit">Search</button>
+		</form>
+		<div class="card card-body">
+			<h4>{{total}}</h4>
+			<table class="table table-sm">
+				<tr>
+					<th>Product</th>
+					<th>quantity</th>
+					<th>Price</th>
+					<th>Size</th>
+					<th>Color</th>
+					<th>Date Create</th>
+					<th>Tag</th>
+				</tr>
+		        {% for item in data %}
+				<tr>
+					<th>{{item.product.name}}</th>
+					<th>{{item.quantity}}</th>
+					<th>{{item.product.price}}</th>
+					<th>{{item.size}}</th>
+					<th>{{item.color}}</th>
+					<th>{{item.date_complete}}</th>
+					<th>{{item.product.tag}}</th>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

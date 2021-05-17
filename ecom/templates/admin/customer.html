@@ -1,0 +1,74 @@
+{%  extends 'admin/mainadmin.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+	.profile-pic{
+		max-width: 200px;
+		max-height:200px;
+		margin: 0 auto;
+		border-radius: 50%;
+	}
+</style>
+	<br>
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Customer:</h5>
+			<div class="card" style="width: 18rem;">
+                <img class="profile-pic"  src="{{customer.profile_pic.url}}" alt="Card image cap">
+                <div class="card-body">
+                    <table class="card-table table">
+                        <tbody>
+                          <tr>
+                            <td>Name</td>
+                            <td>{{customer.name}}</td>
+                          </tr>
+                          <tr>
+                            <td>Phone</td>
+                            <td>{{customer.phone}}</td>
+                          </tr>
+                          <tr>
+                            <td>Email</td>
+                            <td>{{customer.email}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+		</div>
+	</div>
+
+
+	<div class="col-md">
+		<div class="card card-body">
+            <h1 style="text-align: center;padding: 10px"><h5>Bought:{{total}}</h5></h1>
+            <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Date of purchase</th>
+                  </tr>
+                </thead>
+                {% for i in item %}
+                    <tbody>
+                    <tr>
+                        <td>{{i.product.name}}</td>
+                        <td>{{i.product.price}}</td>
+                        <td>{{i.size}}</td>
+                        <td>{{i.quantity}}</td>
+                        <td>{{i.date_complete}}</td>
+                    </tr>
+                   
+                    </tbody>
+                {% endfor %}
+              </table>
+		</div>
+
+	</div>
+</div>
+{% endblock %}
