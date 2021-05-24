@@ -28,8 +28,8 @@ from dashboard.urls import *
 import json
 import datetime
 from .decorators import unauthenticated_user, allowed_users, admin_only
-from .form import CreateUserForm,customerForm,changePassWordForm,commentForm,addProductForm,updataProductForm
-from . utils import cartData,ecommerce3Product
+from .form import customerForm,changePassWordForm
+from .utils import cartData,ecommerce3Product
 from .filter import productFilter
 # Create your views here.
 @login_required(login_url='login')
@@ -57,69 +57,7 @@ def dashboardPage(request):
     
     context = {'room':room,'customer':customer,'numberUser':numberUser,'data':data,'total':total,'myFilter': myFilter}
     return render(request, 'admin/dashboard.html', context)
-@unauthenticated_user
-def registerPage(request):
-    form = CreateUserForm()
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get('email')
-            phone = form.cleaned_data.get('phone')
-            print(phone[0])
-            if phone.isnumeric() == False or phone[0] != '0':
-                messages.success(request, 'Phone illegal')
-            else:
-                user = form.save()
-                group = Group.objects.get(name='customer')
-                user.groups.add(group)
-                Customer.objects.create(
-                    user=user,
-                    name = username,
-                    email = email,  
-                    phone = phone
-                )
-                customer1 = Customer.objects.get(user = user)
-                oldPassWord.objects.create(
-                    customer = customer1
-                )
-                messages.success(request, 'Account was creted for ' + username)
-                return redirect('login')
-    context = {'form': form}
-    return render(request, 'pages/register.html', context)
-
-
-@unauthenticated_user
-def loginPage(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        print("passƯord:",password)
-        user = authenticate(request, username=username, password=password)
-        print('user:',user)
-        if user is not None: 
-            login(request, user)
-            
-            return redirect('home')  
-        else:
-            messages.info(request, 'Username or Password is incorrect')
-    context = {}
-    return render(request, 'pages/login.html', context)
-
-def logoutUser(request):
-    if request.user.groups.exists():
-        group = request.user.groups.all()[0].name
-        if group != 'admin':
-            t=LoginAttempts.objects.filter(customer=request.user.customer).latest('th')
-            t.end = datetime.datetime.now()
-            t.save()
-            print('tL',t.start,':',t.customer,':',t.end,':',t.th)
-    
-            t.save()
-        
-    logout(request)
-    return redirect('login')
-
+ 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def changePassWord(request):
