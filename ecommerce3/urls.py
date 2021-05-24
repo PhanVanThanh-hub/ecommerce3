@@ -21,7 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('ecom.urls')),
     path('',include('dashboard.urls')),
-    path('', include('chat.urls')),
-    path('', include('Product.urls')),
-]
+    path('',include('chat.urls')),
+    path('',include('Product.urls')),
+    path('',include('register.urls')),
+]            
 urlpatterns +=static(settings.MEDIA_URL, document_root =settings.MEDIA_ROOT)

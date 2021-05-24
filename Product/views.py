@@ -1,22 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
-
 
 from django.core.paginator import Paginator
 
 from ecom.models import *
 
-
-
-import re
-
-import json
-import datetime
-from ecom.decorators import  allowed_users
-from ecom.form import commentForm
-from ecom.utils import cartData,ecommerce3Product
-from ecom.filter import productFilter
+from .decorators import  allowed_users
+from .form import commentForm
+from ecom.utils import ecommerce3Product
 # Create your views here.
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])

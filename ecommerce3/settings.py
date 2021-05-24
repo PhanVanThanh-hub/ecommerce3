@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
     'chat',
-    'Product'
+    'Product',
+    'register',
 ]
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',

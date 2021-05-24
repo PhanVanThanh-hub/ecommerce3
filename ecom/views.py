@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import inlineformset_factory
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 from django.views.generic import ListView

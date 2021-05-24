@@ -3,18 +3,14 @@ from ecom.models import *
  
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group, User
  
-from django.contrib.auth.models import Group, 
+from .form import CreateUserForm
 
- 
-from django.conf import settings
- 
-from ecom.form import CreateUserForm
-
-from dashboard.urls import *
  
 import datetime
-from ecom.decorators import unauthenticated_user, 
+from  .decorators import unauthenticated_user
  
 # Create your views here.
 @unauthenticated_user

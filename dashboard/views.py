@@ -1,24 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from .models import *
-from django.contrib.auth.decorators import login_required
-
-from django.contrib.auth.hashers import check_password
-from django.conf import settings
-
-from datetime import timedelta
-
-from django.core.paginator import Paginator
 
 from ecom.models import *
 from chat.models import *
 import datetime
-from ecom.decorators import admin_only
-from ecom.form import addProductForm,updataProductForm
+from .decorators import admin_only
+from .form import addProductForm,updataProductForm
  
-
-
- 
-
 @admin_only
 def customer(request,pk):
     customer = Customer.objects.get(id = pk)
