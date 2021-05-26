@@ -8,6 +8,7 @@
 
  
 <a href="{% url 'dashboard:addProduct' %}">addProduct</a>
+<a href="{% url 'dashboard:upDataProduct' %}">upDataProduct</a>
 <div class="bg0 m-t-23 p-b-140">
     <div class="container">
         <div class="row isotope-grid">
@@ -24,7 +25,7 @@
 
                     <div class="block2-txt flex-w flex-t p-t-14">
                         <div class="block2-txt-child1 flex-col-l ">
-                            <a href="{% url 'Product:productDetail' product.id  %}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                            <a class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                 {{product.name}}
                             </a>
                             

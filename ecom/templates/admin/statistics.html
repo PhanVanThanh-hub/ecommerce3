@@ -178,6 +178,18 @@
             </div>
           </div>
         </div>
- 
+        {% for name ,x in sell.items %}
+          <h4>{{name}}:{{x}}</h4>
+        {% endfor%}
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle description-text" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            TOTAL REVENUE
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
 </body>
 </html>

@@ -39,7 +39,7 @@ def dashboardPage(request):
     data = Data.objects.all().filter(complete=True)
     myFilter = productFilter(request.GET,queryset=data)
     data = myFilter.qs
-    date = LoginAttempts.objects.all()
+    date = LoginAttempts.objects.all() 
     for i in date:
         a= i.start.strftime('%m/%d/%Y%H%M%S')
         b= i.end.strftime('%m/%d/%Y%H%M%S')
@@ -53,8 +53,15 @@ def dashboardPage(request):
         total += item.product.price * item.quantity
     
     room = Room.objects.all()
-    
-    context = {'room':room,'customer':customer,'numberUser':numberUser,'data':data,'total':total,'myFilter': myFilter}
+    paginator = Paginator(data, 10)
+    page = request.GET.get('page', 1)
+    try:
+        products_paged = paginator.page(page)
+    except PageNotAnInteger:
+        products_paged = paginator.page(1)
+    except EmptyPage:
+        products_paged = paginator.page(paginator.num_pages)
+    context = {'data':products_paged,'room':room,'customer':customer,'numberUser':numberUser,'total':total,'myFilter': myFilter}
     return render(request, 'admin/dashboard.html', context)
  
 @login_required(login_url='login')

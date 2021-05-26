@@ -242,7 +242,7 @@ class Data(models.Model):
     @property
     def get_total(self):
         total = self.quantity* self.product.price
-        return total
+        return float(total)
 
 
 

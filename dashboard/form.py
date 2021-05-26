@@ -1,6 +1,4 @@
 from django.forms import ModelForm, Textarea
-from django.contrib.auth.forms import  UserCreationForm
-from django.contrib.auth.models import  User
 from django import forms
 from ecom.models import *
 

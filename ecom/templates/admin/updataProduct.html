@@ -9,9 +9,9 @@
 <section class="content">
     <div class="row">
       <div class="col-md-6">
-        <div class="card card-primary">
+        <div class="card card-secondary">
           <div class="card-header">
-            <h3 class="card-title">Add Product</h3>
+            <h3 class="card-title">Updata</h3>
 
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -20,24 +20,14 @@
             </div>
           </div>
           <div class="card-body">
-            <div class="form-group">
-              <form action="" method="POST"enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_ul }}
-                <input type="submit" value="Submit">
-             </form>
-              <input type="text" id="inputName" class="form-control">
-            </div>
+            <form action="" method="POST"enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ form1.as_ul }}
+              <input type="submit" value="Submit" >
+           </form>
           </div>
-          <!-- /.card-body -->
         </div>
-        <!-- /.card -->
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <a href="#" class="btn btn-secondary">Cancel</a>
-        <input type="submit" value="Create new Porject" class="btn btn-success float-right">
+
       </div>
     </div>
   </section>

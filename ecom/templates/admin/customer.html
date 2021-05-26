@@ -9,11 +9,22 @@
 		margin: 0 auto;
 		border-radius: 50%;
 	}
+  .tbody {
+  height: 40px !important;
+  overflow-y: scroll;	
+}
+   
+.my-tbody {
+  height:360px;
+  display:block;
+  overflow-y:scroll;
+  width:100%;
+}
 </style>
 	<br>
 
 <div class="row">
-	<div class="col-md">
+	<div class="col-md4">
 		<div class="card card-body">
 			<h5>Customer:</h5>
 			<div class="card" style="width: 18rem;">
@@ -44,7 +55,7 @@
 	<div class="col-md">
 		<div class="card card-body">
             <h1 style="text-align: center;padding: 10px"><h5>Bought:{{total}}</h5></h1>
-            <table class="table table-dark">
+            <table class="table table-dark my-tbody">
                 <thead>
                   <tr>
                     <th scope="col">Name</th>
@@ -70,5 +81,14 @@
 		</div>
 
 	</div>
+</div>
+<div>
+  <h4>Number of logins{{times}}
+      </br>
+      Used time {{total_time}}
+      </br>
+      The average time  {{averageTime}}
+  </h4>
+
 </div>
 {% endblock %}
