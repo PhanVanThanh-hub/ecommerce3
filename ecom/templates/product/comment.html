@@ -1,0 +1,187 @@
+{% load static%}
+<div class="p-b-30 m-lr-15-sm">
+    <!-- Review -->
+    <ul id="chat-log"> 
+    {% for comment in comment%}
+    <div class="flex-w flex-t p-b-68"  >
+         
+        <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
+            <img src="{{comment.customer.profile_pic.url}}" alt="AVATAR">
+        </div>
+
+        <div class="size-207">
+            <div class="flex-w flex-sb-m p-b-17">
+                <span class="mtext-107 cl2 p-r-20">
+                     {{comment.customer.name}} {{comment.data_create}}
+                </span>
+
+                <span class="fs-18 cl11">
+                    <i class="zmdi zmdi-star"></i>
+                    <i class="zmdi zmdi-star"></i>
+                    <i class="zmdi zmdi-star"></i>
+                    <i class="zmdi zmdi-star"></i>
+                    <i class="zmdi zmdi-star-half"></i>
+                </span>
+            </div>
+
+            <p class="stext-102 cl6">
+                {{comment.comment}}  
+            </p>
+        </div>
+     
+    </div>
+    {% endfor %}
+    </ul>
+    {% if user.username%}
+    <!-- Add review -->
+    <form class="w-full"method="POST" action=""  enctype="multipart/form-data">
+        {% csrf_token%}
+        <h5 class="mtext-108 cl2 p-b-7">
+            Add a review
+        </h5>
+
+        <p class="stext-102 cl6">
+            Your email address will not be published. Required fields are marked *
+        </p>
+
+        <div class="flex-w flex-m p-t-50 p-b-23">
+            <span class="stext-102 cl3 m-r-16">
+                Your Rating
+            </span>
+
+            <span class="wrap-rating fs-18 cl11 pointer">
+                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                <input class="dis-none" type="number" name="rating">
+            </span>
+        </div>
+
+        <div class="row p-b-25">
+            <div class="col-12 p-b-5">
+                <label class="stext-102 cl3" for="review">Your review</label>
+                <textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="chat-message-input" name="review"></textarea>
+            </div>
+
+            <!-- <div class="col-sm-6 p-b-5">
+                <label class="stext-102 cl3" for="name">Name</label>
+                <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="name" type="text" name="name">
+            </div>
+
+            <div class="col-sm-6 p-b-5">
+                <label class="stext-102 cl3" for="email">Email</label>
+                <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email" type="text" name="email">
+            </div> -->
+        </div>
+
+        <button class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10"  id="chat-message-submit" class="submit">
+            Submit
+        </button>
+    </form>
+    {% endif%}
+    <script src = "{% static 'js/reconnecting-websocket.js' %}"></script>
+   
+    <script>
+        var roomName ={{room_name_json}};
+        var username ={{username}};
+        var author_user ={{author_user}};
+       
+        console.log("-:",roomName,':',username)
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/productDetail/'
+            + roomName
+            + '/'
+        );
+        
+        chatSocket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            console.log("1:",data)
+            //var pic ='{{pic}}';
+            createMessage(data);
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            console.log("122")
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'roomName':roomName,
+                'message': message,
+                'form':username,
+                'us':author_user,
+                'pic':'{{pic}}'
+                
+            }));
+            messageInputDom.value = '';
+        };  
+        function createMessage(data){
+            var author = data['user'];
+            console.log("111111:",data['message'],':',author,':',typeof(data['pic']))
+            var pic1 = String(data['pic']);
+            var msgListTag1 = document.createElement('div');
+            var msgListTag2 = document.createElement('div');
+            msgListTag1.className="size-207";
+            msgListTag2.className="flex-w flex-sb-m p-b-17";
+          
+             
+            var span1 = document.createElement('span'); 
+            var span2 = document.createElement('span'); 
+            var pTag = document.createElement('p');
+            var i1 = document.createElement('i');var i2 = document.createElement('i');var i3 = document.createElement('i');var i4 = document.createElement('i');
+            var i5 = document.createElement('i');
+            pTag.className="stext-102 cl6";
+            pTag.textContent = data['message'];
+            span1.className="mtext-107 cl2 p-r-20";
+            span2.className="fs-18 cl11";
+            i1.className="zmdi zmdi-star";i2.className="zmdi zmdi-star";i3.className="zmdi zmdi-star";i4.className="zmdi zmdi-star";
+            i5.className="zmdi zmdi-star-half";
+            span2.appendChild(i1);span2.appendChild(i2);span2.appendChild(i3);span2.appendChild(i4);
+            span2.appendChild(i5);
+            var d = new Date();
+            var month = new Array();
+            month[0] = "January";
+            month[1] = "February";
+            month[2] = "March";
+            month[3] = "April";
+            month[4] = "May";
+            month[5] = "June";
+            month[6] = "July";
+            month[7] = "August";
+            month[8] = "September";
+            month[9] = "October";
+            month[10] = "November";
+            month[11] = "December";
+            var n = month[d.getMonth()];
+            span1.textContent = author +" "+ n +" "+d.getDate()+"," + d.getFullYear() +","+d.getHours()+":" + d.getMinutes();
+            msgListTag2.appendChild(span1);
+            msgListTag2.appendChild(span2);
+            msgListTag1.appendChild(msgListTag2);
+            msgListTag1.appendChild(pTag);
+            var msgListTag3 = document.createElement('div');
+            msgListTag3.className="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6"
+            var imgTag = document.createElement('img');
+            imgTag.src="{{pic1}}";
+            msgListTag3.appendChild(imgTag);
+            var  msgListTag= document.createElement('div');
+            msgListTag.className="flex-w flex-t p-b-68";
+            msgListTag.appendChild(msgListTag3);
+            msgListTag.appendChild(msgListTag1);
+            document.querySelector('#chat-log').appendChild(msgListTag);
+        }
+    </script>
+</div>

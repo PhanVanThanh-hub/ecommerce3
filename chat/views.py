@@ -26,5 +26,4 @@ def room(request, slug):
     context = {'messages':messages,'room_name_json':mark_safe(json.dumps(slug)),'username':mark_safe(json.dumps(request.user.username))}
     print("messgae:",messages)
     return render(request, 'chat/chat1.html',context)
-def xxx(request):
-    return render(request, 'chat/index.html')
+ 

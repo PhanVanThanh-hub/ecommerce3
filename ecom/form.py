@@ -17,9 +17,6 @@ class changePassWordForm(forms.Form):
     newPassword = forms.CharField(max_length=100)
     confirmPassword = forms.CharField(max_length=100)
 
-class commentForm(forms.Form):
-    comment = forms.CharField(widget=forms.Textarea(attrs={"rows":6, "cols":75}),max_length=1000)
-
 class addProductForm(ModelForm):
     class Meta:
         model = Product

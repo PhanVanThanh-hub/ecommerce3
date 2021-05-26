@@ -515,27 +515,6 @@ function addFavorite2(productId,action){
          });
 }
 
-$('#post-cmt').on('submit', function(event){
-    event.preventDefault();
-    console.log("form submitted!")  // sanity check
-    create_cmt();
-});
-function create_cmt(){
-
-    $.ajax({
-        url : window.location.href ,
-        type : "POST", 
-        data : { the_post : $('#post-text').val() }, // data sent with the post request
-        headers:{
-            'X-CSRFToken':csrftoken,
-        },
-        // handle a successful response
-        success : function(json) {
-            
-            console.log("success"); // another sanity check
-        },
-    });
-}
 /*==================================================================
 [ quickView ]*/
 var quickBtn= document.getElementsByClassName("quickView")

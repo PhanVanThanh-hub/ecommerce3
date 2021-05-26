@@ -2,8 +2,6 @@ from django.forms import ModelForm, Textarea
 from django import forms
 from ecom.models import *
 
-class commentForm(forms.Form):
-    comment = forms.CharField(widget=forms.Textarea(attrs={"rows":6, "cols":75}),max_length=1000)
 
 class addProductForm(ModelForm):
     class Meta:

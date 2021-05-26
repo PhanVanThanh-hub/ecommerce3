@@ -89,6 +89,7 @@ WSGI_APPLICATION = 'ecommerce3.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 ASGI_APPLICATION = 'ecommerce3.asgi.application'
+ 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 CHANNEL_LAYERS = {
