@@ -2,10 +2,11 @@ from django.shortcuts import render
 from .models import *
 
 from ecom.models import *
+from pay.models import *
 from chat.models import *
 import datetime
 from .decorators import admin_only
-from .form import addProductForm,updataProductForm
+from .form import addProductForm, giftVoucherForm,updataProductForm
 
 
 def convert(seconds):
@@ -18,12 +19,14 @@ def convert(seconds):
     return "%d:%02d:%02d" % (hour, minutes, seconds)
 @admin_only
 def customer(request,pk):
+ 
+    #------------------------
     customer = Customer.objects.get(id = pk)
     order = DataOrder.objects.get(customer = customer)
     total = order.get_total_item
     
     #list product bought
-    item = Data.objects.filter(dataOrder= order,complete=True)
+    item = Data.objects.filter(dataOrder= order,complete=True).order_by("-date_complete")
     #--------------------------
 
 
@@ -61,6 +64,8 @@ def statistics(request):
     total_sales= 0
     for i in data:
         total_sales += i.quantity
+    #--------------------------
+    #Tong so khach hang
     total_customers = Customer.objects.all().count()
     #---------------------------
 
@@ -89,6 +94,12 @@ def statistics(request):
     total_profit = i.total_profit()
     #-------------------------
 
+    #Bill
+    bill = Bill.objects.all()
+    print("bill:",bill)
+    for i in bill:
+        print(i.product,":",i.amount,':',i.cost,':',i.date_create)
+    #____________________________
     context = {'sell':sell,'total_sales':total_sales,'total_customers':total_customers,'total_revenue':total_revenue,'total_cost':total_cost,'total_profit':total_profit}
     return render(request,'admin/statistics.html',context)
 @admin_only
@@ -157,3 +168,18 @@ def upDataProduct(request):
                 )  
             return render(request, 'admin/updataProduct.html',context) 
     return render(request,'admin/updataProduct.html',context)
+
+@admin_only
+def giftVoucher(request):
+    form = giftVoucherForm()
+    context ={'form':form}
+    if request.method == 'POST':   
+        print("hello-")       
+        form = giftVoucherForm(request.POST)  
+        print("form:",form.is_valid())
+        if form.is_valid():
+            giftVoucher = form.save()
+            
+        return render(request, 'admin/gift.html',context)
+    print("fomr:",form)
+    return render(request,'admin/gift.html',context)

@@ -21,12 +21,7 @@ class Message(models.Model):
         return self.author.username
 
     def last_10_messages(roomName):
-        print("1231")
-        print(roomName)
-        print("lalala")
         count =int(Message.objects.filter(room = roomName).count())
-        print("aaaaaaaaaaaaa")
-        print("count:",count)
         if count<=10:
             count =10
         return Message.objects.filter(room = roomName).order_by('timestamp').all()[count-10:count]

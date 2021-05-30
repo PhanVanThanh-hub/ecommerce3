@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
  
 from .form import CreateUserForm
-
+from pay.models import *
+from chat.models import *
  
 import datetime
 from  .decorators import unauthenticated_user
@@ -35,10 +36,28 @@ def registerPage(request):
                     email = email,  
                     phone = phone
                 )
+
+                #Tao room
+                room = Room.objects.create(nameRoom = user)
+                Message.objects.create(room = room,author =user)
+                 
+                #-----------------
+                 
+                #Tao password cu
                 customer1 = Customer.objects.get(user = user)
                 oldPassWord.objects.create(
                     customer = customer1
                 )
+                #------------------
+                
+                #Tao ma giam gia
+                Discount.objects.create(customer = customer1)
+                #-----------------------
+
+                #Tao tai khoan tich luy
+                customer = Customer.objects.get(user = user)
+                accumulationCard.objects.create(customer=customer)
+                #---------------
                 messages.success(request, 'Account was creted for ' + username)
                 return redirect('login')
     context = {'form': form}

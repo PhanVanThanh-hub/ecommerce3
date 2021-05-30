@@ -1,7 +1,7 @@
 from django.forms import ModelForm, Textarea
 from django import forms
 from ecom.models import *
-
+from .models import *
 
 class addProductForm(ModelForm):
     class Meta:
@@ -19,6 +19,15 @@ class updataProductForm(forms.Form):
     amout = forms.IntegerField()
 
     cost = forms.FloatField()
+
+class giftVoucherForm(ModelForm):
+     class Meta:
+        model = giftVoucher
+        fields = '__all__'
+        widgets = {
+            'all': Textarea(attrs={'cols': 80, 'rows': 20}),
+        }
+
      
 
      

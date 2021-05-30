@@ -16,14 +16,15 @@ def room(request, slug):
     room =Room.objects.get(nameRoom = id)
     messages = Message.last_10_messages(room)
     for mesage in messages:
-        print("3:",type(Message.author))
-        a= str(Message.author)
-        print("2:",type(a))
-        if a == "admin":
+        print("s:",str(mesage))
+        if str(mesage) == "admin":
             print("1:",mesage.author)
         else:
             print("ngu")
-    context = {'messages':messages,'room_name_json':mark_safe(json.dumps(slug)),'username':mark_safe(json.dumps(request.user.username))}
+    #admin hay not
+    a = str(author)
+    #---------------------
+    context = {'a':a,'messages':messages,'room_name_json':mark_safe(json.dumps(slug)),'username':mark_safe(json.dumps(request.user.username))}
     print("messgae:",messages)
     return render(request, 'chat/chat1.html',context)
  

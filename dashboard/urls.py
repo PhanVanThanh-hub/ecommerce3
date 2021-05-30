@@ -9,5 +9,6 @@ urlpatterns = [
     path('customer/<str:pk>/',views.customer,name='customer'),
     path('productAdmin/',views.productAdminPage,name='productAdmin'),
     path('addProduct/', views.addProduct, name="addProduct"),
-    path('ipDataProduct/', views.upDataProduct, name="upDataProduct"),
+    path('upDataProduct/', views.upDataProduct, name="upDataProduct"),
+    path('giftVoucher/', views.giftVoucher, name="giftVoucher"),
 ]

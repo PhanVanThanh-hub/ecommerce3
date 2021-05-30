@@ -1,14 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import *
 from django.http import JsonResponse
-from django.contrib.auth.forms import UserCreationForm
-from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 from django.views.generic import ListView
-
-from django.contrib.auth.hashers import check_password
 from django.conf import settings
 
 from datetime import timedelta
@@ -19,7 +15,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from chat.models import *
-
+from dashboard.models import *
 
 
 import re
@@ -30,6 +26,7 @@ from .decorators import unauthenticated_user, allowed_users, admin_only
 from .form import customerForm,changePassWordForm
 from .utils import cartData,ecommerce3Product
 from .filter import productFilter
+from pay.models import *
 # Create your views here.
 @login_required(login_url='login')
 @admin_only
@@ -40,14 +37,6 @@ def dashboardPage(request):
     myFilter = productFilter(request.GET,queryset=data)
     data = myFilter.qs
     date = LoginAttempts.objects.all() 
-    for i in date:
-        a= i.start.strftime('%m/%d/%Y%H%M%S')
-        b= i.end.strftime('%m/%d/%Y%H%M%S')
-
-        if (a==b):
-            i.delete()
-        
-        print('sss:',i.start,':',i.end)
     total = 0
     for item in data:
         total += item.product.price * item.quantity
@@ -61,6 +50,7 @@ def dashboardPage(request):
         products_paged = paginator.page(1)
     except EmptyPage:
         products_paged = paginator.page(paginator.num_pages)
+     
     context = {'data':products_paged,'room':room,'customer':customer,'numberUser':numberUser,'total':total,'myFilter': myFilter}
     return render(request, 'admin/dashboard.html', context)
  
@@ -147,37 +137,6 @@ def aboutPage(request):
     context = {'products':products,'order':order,'item':item,'favorite':favorite,'sum':sum}
     return render(request, 'pages/about.html', context)
 
-
-    
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
-def blogDetailPage(request,pk):
-    data      = cartData(request,pk)
-    products  = data['products']
-    order     = data['order']
-    blogs     = data['blogs']
-    item      = data['item']
-    favorite  = data['favorite']
-    sum       = data['sum']
-    context = {'products':products,'order':order,'blogs':blogs,'item':item,'favorite':favorite,'sum':sum}
-    
-    return render(request, 'pages/blog-detail.html', context)
-
-
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
-def blogPage(request):
-    data      = ecommerce3Product(request)
-    products  = data['products']
-    order     = data['order']
-    blogs     = data['blogs']
-    item      = data['item']
-    favorite  = data['favorite']
-    sum       = data['sum']
-    context = {'products':products,'order':order,'blogs':blogs,'item':item,'favorite':favorite,'sum':sum}
-    return render(request, 'pages/blog.html', context)
-
-
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def contactPage(request):
@@ -216,7 +175,7 @@ def home3Page(request):
     context = {'products':products,'order':order,'item':item,'favorite':favorite,'sum':sum}
     return render(request, 'pages/home3.html', context)
 
-
+from datetime import timedelta 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def home(request):
@@ -226,8 +185,28 @@ def home(request):
         customer=request.user.customer,
         start=datetime.datetime.now()
     )
+    #Tang gift voucher
+    gift = giftVoucher.objects.all()[0]
+    a=((gift.dateTimeGift).strftime("%Y%b%d"))
+    b=((datetime.datetime.now()).strftime("%Y%b%d"))
+    print(a)
+    if str(a) == str(b):
+        x = LoginAttempts.objects.all().filter(start>=gift.dateTimeGift).count()
+        if x==1:
+            customer = Customer.objects.get(user = request.user)
+            discount = Discount.objects.get(customer= customer)
+            discount.amount50 = int(discount.amount50)+ int(gift.amount50)
+            discount.amount30 = int(discount.amount30)+ int(gift.amount30)
+            discount.amount20 = int(discount.amount20)+ int(gift.amount20)
+            discount.complete = True
+            discount.save()
+    if gift.dateTimeGift<datetime.datetime.now():
+        gift.delete()
+    #-----------------------------
+
+
     
-   
+    
     
     data      = ecommerce3Product(request)
     products  = data['products']
@@ -257,18 +236,7 @@ def home(request):
     return render(request, 'pages/index.html', context)
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
-def shopingcartPage(request):
-    data      = ecommerce3Product(request)
-    products  = data['products']
-    order     = data['order']
-    item      = data['item']
-    favorite  = data['favorite']
-    sum       = data['sum']
-    print("item:",item.get_total_order)
-    context = {'products':products,'order':order,'item':item,'favorite':favorite,'sum':sum}
-    return render(request, 'pages/shoping_cart.html', context)
+ 
 
 from django.forms.models import model_to_dict
 from django.core import serializers
@@ -338,9 +306,10 @@ def addCartItem(request):
                 orderItem.quantity = orderItem.quantity -1
                 quantity = quantity -1
                 product.amout = float(product.amout)+1
+                total = total - orderItem.product.price
                 product.save()
-                
                 orderItem.save()
+                
             if orderItem.quantity ==0:
                 product.amout=0
                 product.save()
@@ -367,62 +336,7 @@ def accountSettingPage(request):
 
 
 
-@login_required(login_url='login')
-def processOrder(request):
-    data = json.loads(request.body)
-    address = data['shippingInfo']['address']
-    state = data['shippingInfo']['state']
-    zipcode = data['shippingInfo']['zipcode']
-    total = data['total']
-    if request.user.is_authenticated:
-        customer = request.user.customer
-    order= Order.objects.get(customer=customer)
-    print("dâta",data)
-     
-    if order.discount !=1.0:
-        discount = Discount.objects.get(customer=customer)
-        if discount.amount50 ==0 and discount.amount30 ==0 and discount.amount20 ==0:
-            discount.complete=False
-        discount.save()
-        order.discount=1.0
-    print("order:",order)
-    print("order:",order.get_total_order)
-    print("order1:",order.get_total_item())
-    print("total:",total)
-    total = order.get_total_item()
-    Shiping.objects.create(
-        customer =customer,
-        order = order,
-        address = address,
-        state= state,
-        zipcode = zipcode
-    )
-
-    orderItem = order.orderitem_set.all()
-    dataOrder ,create= DataOrder.objects.get_or_create(customer = customer)
-    for item in orderItem:
-        Data.objects.create(
-            dataOrder=dataOrder,
-            complete=True,
-            quantity=item.quantity,
-            product=item.product,
-            size = item.size,
-            color = item.color,
-        ) 
-        orderItem.delete()
-        print("ok")
-    incom=Income.objects.all().latest('id')
-    if incom.data_create.month == datetime.datetime.now().month:  
-        incom.total_revenue = float(total) +float(incom.total_revenue)
-        incom.save()
-    else:
-        Income.objects.create(
-            total_revenue = float(order.get_total_item())
-        )  
-    order.complete= True
-    order.save()
-    order.delete()
-    return JsonResponse('Payment submitted..', safe=False)
+ 
 
 def addFavorite(request):
     data = json.loads(request.body)
@@ -441,56 +355,15 @@ def addFavorite(request):
         favoriteProduct.delete()
     return JsonResponse('Item was added', safe=False)
  
-def discount(request):
-    data = json.loads(request.body)
-    code = data['discount']
-    customer = request.user.customer
-    discount = Discount.objects.get(customer=customer)
-    order = Order.objects.get(customer=customer)
-    print("discount50:",discount.discount50)
-    if discount.complete == True:
-        if code == discount.discount50 and discount.amount50!=0:
-            print("Bigo50")
-            order.discount = float(order.discount)-float(order.discount)*0.5
-            discount.amount50 -=1
-        if code == discount.discount30 and discount.amount50!=0:
-            print("Bigo30")
-            order.discount = float(order.discount)-float(order.discount)*0.3
-            discount.amount30 -=1
-        if code == discount.discount20 and discount.amount50!=0:
-            print("Bigo20")
-            order.discount = float(order.discount)-float(order.discount)*0.2
-            discount.amount20 -=1
-        discount.save()
-    print("order.discount:",order.discount)
-    print("discount50:",discount.amount50) 
-    print("discount30:",discount.amount30)
-    print("discount20:",discount.amount20)
-    order.save()
-    return JsonResponse('Item was added', safe=False)
+ 
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import TaskSerializer,TaskOrder,ProductList
+from .serializers import TaskOrder,ProductList
 
 
-@api_view(['GET'])
-def apiOverview(request):
-	api_urls = {
-		'List':'/task-list/',
-		'Detail View':'/task-detail/<str:pk>/',
-		'Create':'/task-create/',
-		'Update':'/task-update/<str:pk>/',
-		'Delete':'/task-delete/<str:pk>/',
-		}
-	return Response(api_urls)
+ 
 
-@api_view(['GET'])
-def discountList(request):
-    customer = request.user.customer
-    tasks = Discount.objects.all().filter(customer= customer)
-    serializer = TaskSerializer(tasks, many=True)
-    return Response(serializer.data)
 
  
 

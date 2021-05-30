@@ -41,12 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ecom.apps.EcomConfig',
+    'pay.apps.PayConfig',
     'dashboard.apps.DashboardConfig',
     'django_filters',
     'rest_framework',
     'chat',
     'Product',
     'register',
+    'blog',
+     
 ]
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',

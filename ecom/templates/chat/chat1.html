@@ -48,6 +48,7 @@
 			<input type="text" placeholder="Search contacts..." />
 		</div>
 		<div id="contacts">
+			{% if a == "admin" %}
 			<ul>
 				<li class="contact">
 					<div class="wrap">
@@ -69,7 +70,7 @@
 						</div>
 					</div>
 				</li>
-				 
+			{%endif%}
 			</ul>
 		</div>
 		<div id="bottom-bar">
@@ -90,12 +91,12 @@
 		<div class="messages">
 			<ul id="chat-log">
 				{% for message in messages%}
-					{% if message.author == "admin" %}
+					{% if message.author == request.user %}
 						<li class="sent">
 							<img src="{{author.profile_pic.url}}" alt="" />
 							<p>{{message.content}}||{{message.author}}</p>
 						</li>
-					{% elif message.author != "username" %}
+					{% else %}
 						<li class="replies">
 							<img src='{{request.user.customer.profile_pic.url}}' alt="" />
 							<p>{{message.content}}||{{username}}||{{message.author}}</p>

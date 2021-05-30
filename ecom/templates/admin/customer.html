@@ -63,6 +63,7 @@
                     <th scope="col">Size</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Date of purchase</th>
+                    <th scope="col">Discount</th>
                   </tr>
                 </thead>
                 {% for i in item %}
@@ -73,6 +74,7 @@
                         <td>{{i.size}}</td>
                         <td>{{i.quantity}}</td>
                         <td>{{i.date_complete}}</td>
+                        <td>{%widthratio i.discount 1 100 %}%</td>
                     </tr>
                    
                     </tbody>

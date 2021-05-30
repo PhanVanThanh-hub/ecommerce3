@@ -349,8 +349,17 @@ for(i=0;i<addBtn.length;i++){
         }
         console.log("x:",typeof(x))
         
-        if(size == 'Choose an option' || color == 'Choose an option'||Number(amount)<Number(x)){
+        if(size == 'Choose an option' || color == 'Choose an option'){
             console.log("ngu")            
+        }
+        else if(Number(amount)<Number(x)){
+            Swal.fire({
+                position: 'between',
+                icon: 'error',
+                title: 'Out of stock!'+'Just have:'+Number(amount),
+                showConfirmButton: false,
+                timer: 2500
+            })
         }
         else{
             console.log('productId:',productId,'action:',action,'value:',x)
@@ -363,8 +372,6 @@ for(i=0;i<addBtn.length;i++){
                 color = this.dataset.color
                 size = this.dataset.size
                 var total = document.getElementById("total").value
-                /*length = total.length
-                total=total.slice(1,length)*/
                 console.log("total:",total)
                 
                  
@@ -537,6 +544,7 @@ for(i=0;i<quickBtn.length;i++){
                 console.log("data:",json.product)
                 $('#list-wrapper').html()
             },
+            
         });
     })
 }
