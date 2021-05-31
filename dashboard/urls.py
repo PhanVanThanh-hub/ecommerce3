@@ -11,4 +11,5 @@ urlpatterns = [
     path('addProduct/', views.addProduct, name="addProduct"),
     path('upDataProduct/', views.upDataProduct, name="upDataProduct"),
     path('giftVoucher/', views.giftVoucher, name="giftVoucher"),
+    path('addBlog/', views.addBlog, name="addBlog"),
 ]

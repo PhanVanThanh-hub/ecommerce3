@@ -34,7 +34,13 @@ def blogPage(request):
     item      = data['item']
     favorite  = data['favorite']
     sum       = data['sum']
-    for blog in blogs:
-        print("1",blog.data_ordered)
-    context = {'products':products,'order':order,'blogs':blogs,'item':item,'favorite':favorite,'sum':sum}
+    paginator = Paginator(blogs, 3)
+    page = request.GET.get('page', 1)
+    try:
+        blog_paged = paginator.page(page)
+    except PageNotAnInteger:
+        blog_paged = paginator.page(1)
+    except EmptyPage:
+        blog_paged = paginator.page(paginator.num_pages)
+    context = {'products':products,'order':order,'blogs':blog_paged,'item':item,'favorite':favorite,'sum':sum}
     return render(request, 'blog/blog.html', context)

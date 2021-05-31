@@ -9,7 +9,9 @@ from django.contrib.auth.models import Group, User
 from .form import CreateUserForm
 from pay.models import *
 from chat.models import *
- 
+from dashboard.models import *
+from pay.models import *
+from datetime import timedelta
 import datetime
 from  .decorators import unauthenticated_user
  
@@ -74,7 +76,41 @@ def loginPage(request):
         print('user:',user)
         if user is not None: 
             login(request, user)
-            
+            if(username !="admin"):
+                LoginAttempts.objects.create(
+                    customer=request.user.customer,
+                    start=datetime.datetime.now()
+                )
+             
+                #Tang gift voucher
+                countGift = giftVoucher.objects.all().filter(complete=False).count()#check so luong gift
+                print("a",countGift)
+                if countGift !=0:
+                    gift = giftVoucher.objects.all()[0]
+                    c= gift.dateTimeGift+datetime.timedelta(days=1)
+                    if c<datetime.datetime.now():#xoa gift da het han
+                        gift.complete=True
+                        gift.save()
+                        
+                countGift1 = giftVoucher.objects.all().filter(complete=False).count()#check so luong gift sau khi xoa gift da het han
+                gift = giftVoucher.objects.all().filter(complete=False)[0]#lay gift dau tien
+                if countGift1!=0:#check xem co ton tai gift con time khong
+                    a=((gift.dateTimeGift).strftime("%Y%b%d"))
+                    b=((datetime.datetime.now()).strftime("%Y%b%d"))
+                    if str(a) == str(b):
+                        c=0
+                        x = LoginAttempts.objects.all().filter(customer=request.user.customer)
+                        for i in x:
+                            if  i.start>=gift.dateTimeGift:
+                                c=c+1
+                        if c==1:
+                            discount = Discount.objects.get(customer= request.user.customer)
+                            discount.amount50 = int(discount.amount50)+ int(gift.amout50)
+                            discount.amount30 = int(discount.amount30)+ int(gift.amout50)
+                            discount.amount20 = int(discount.amount20)+ int(gift.amout50)
+                            discount.complete = True
+                            discount.save()
+                #-----------------------------
             return redirect('home')  
         else:
             messages.info(request, 'Username or Password is incorrect')

@@ -61,6 +61,7 @@
 					<th>Size</th>
 					<th>Color</th>
 					<th>Date Create</th>
+					<th>Discount</th>
 					<th>Tag</th>
 				</tr>
 		        {% for item in data %}
@@ -71,6 +72,7 @@
 					<th>{{item.size}}</th>
 					<th>{{item.color}}</th>
 					<th>{{item.date_complete}}</th>
+					<th>{{item.discount}}</th>
 					<th>{{item.product.tag}}</th>
 				</tr>
 				{% endfor %}

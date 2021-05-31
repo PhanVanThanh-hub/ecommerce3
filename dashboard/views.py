@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from .models import *
-
+from django.http import JsonResponse
 from ecom.models import *
 from pay.models import *
 from chat.models import *
 import datetime
 from .decorators import admin_only
-from .form import addProductForm, giftVoucherForm,updataProductForm
+from .form import AddProductForm, GiftVoucherForm,UpdataProductForm,AddBlogForm
 
 
 def convert(seconds):
@@ -104,17 +104,26 @@ def statistics(request):
     return render(request,'admin/statistics.html',context)
 @admin_only
 def addProduct(request):
-    form = addProductForm()
+    form = AddProductForm()
     context ={'form':form}
-    if request.method == 'POST':     
-        form = addProductForm(request.POST)  
-        
+    if request.is_ajax():    
+        form = AddProductForm(request.POST)  
         if form.is_valid():
             Product = form.save()
+            if 'images1' in request.FILES:
+                Product.images1 = request.FILES['images1']
+            if 'images2' in request.FILES:
+                Product.images2 = request.FILES['images2']
+            if 'images3' in request.FILES:
+                Product.images3 = request.FILES['images3']
+            Product.save()
            
+            context ={'products':Product}
+            print("dmm")
+
+            #Tinh bill
             amount = form.cleaned_data.get('amout')
             cost = form.cleaned_data.get('cost')
-            
             Bill.objects.create(
                 product = Product,
                 amount= amount,
@@ -128,17 +137,18 @@ def addProduct(request):
                 Income.objects.create(
                     total_cost= float(product.cost) * float(amount)
                 )  
-            return render(request, 'admin/addProduct.html',context)
+            #---------------------------------------------
+            return render(request, 'product/productPreview.html',context)
     return render(request,'admin/addProduct.html',context)
 
 @admin_only
 def upDataProduct(request):
-    form1 = updataProductForm()
+    form1 = UpdataProductForm()
     print("hello32")  
     context ={'form1':form1}
     if request.method == 'POST':   
         print("hello-")       
-        form1 = updataProductForm(request.POST)  
+        form1 = UpdataProductForm(request.POST)  
         print("form1:",form1.is_valid())
         if form1.is_valid():    
             print("hello")     
@@ -171,11 +181,11 @@ def upDataProduct(request):
 
 @admin_only
 def giftVoucher(request):
-    form = giftVoucherForm()
+    form = GiftVoucherForm()
     context ={'form':form}
     if request.method == 'POST':   
         print("hello-")       
-        form = giftVoucherForm(request.POST)  
+        form = GiftVoucherForm(request.POST)  
         print("form:",form.is_valid())
         if form.is_valid():
             giftVoucher = form.save()
@@ -183,3 +193,28 @@ def giftVoucher(request):
         return render(request, 'admin/gift.html',context)
     print("fomr:",form)
     return render(request,'admin/gift.html',context)
+
+@admin_only
+def addBlog(request):
+    form = AddBlogForm()
+    context ={'form':form}
+    if request.is_ajax():
+        print("ok")
+        fromProduct = AddBlogForm(request.POST)
+        if fromProduct.is_valid():
+            a= fromProduct.cleaned_data.get('name')
+            Blog = fromProduct.save()
+            if 'images1' in request.FILES:
+                Blog.images1 = request.FILES['images1']
+            Blog.save()
+             
+             
+            print("blog:",Blog.detail)
+            context ={'blogs':Blog}
+            print("222")
+            return render(request, 'blog/blogDetail.html', context)
+
+    return render(request,'admin/addBlog.html',context)
+
+
+ 

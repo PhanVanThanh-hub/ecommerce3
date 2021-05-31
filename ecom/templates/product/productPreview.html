@@ -1,0 +1,118 @@
+{%load static%}
+
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/bootstrap/css/bootstrap.min.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'fonts/iconic/css/material-design-iconic-font.min.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'fonts/linearicons-v1.0.0/icon-font.min.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/animate/animate.css'%}">
+	
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/css-hamburgers/hamburgers.min.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/animsition/css/animsition.min.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/select2/select2.min.css'%}">
+	
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/daterangepicker/daterangepicker.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/slick/slick.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/MagnificPopup/magnific-popup.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'vendor/perfect-scrollbar/perfect-scrollbar.css'%}">
+
+	<link rel="stylesheet" type="text/css" href="{%static 'css/util.css'%}">
+	<link rel="stylesheet" type="text/css" href="{%static 'css/main.css'%}">
+    <style>
+        img{
+            width: 150;
+            height: 300;
+        }
+    </style>
+                        <div class="wrap-pic-w pos-relative">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <img src="{{products.imageURL}}" alt="IMG-PRODUCT">
+                                </div>
+                                <div class="col-sm">
+                                    <img src="{{products.imageURL2}}" alt="IMG-PRODUCT">
+                                </div>
+                                <div class="col-sm">
+                                    <img src="{{products.imageURL3}}" alt="IMG-PRODUCT"> 
+                                </div>
+                              </div>
+                        </div>
+                    
+          
+        
+    <div class="col-md-6 col-lg-5 p-b-30">
+        <div class="p-r-50 p-t-5 p-lr-0-lg">
+            <h4 class="mtext-105 cl2 js-name-detail p-b-14">
+                Name:{{products.name}}||Tag:{{products.tag}}||Type:{{products.type}}
+            </h4>
+
+            <span class="mtext-106 cl2">
+                Price:${{products.price}}USD
+            </span>
+
+            <p class="stext-102 cl3 p-t-23">
+                Description:{{products.description}}
+                {{post.body|safe|linebreaks}}
+            </p>
+        </div>
+    </div>
+    <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">size (in)</th>
+            <th scope="col">width</th>
+            <th scope="col">length</th>
+            <th scope="col">sleeve</th>
+            <th scope="col">shoulder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">S</th>
+            <td>{{products.widthS}}</td>
+            <td>{{products.heightS}}</td>
+            <td>{{products.sleeveS}}</td>
+            <td>{{products.shoulderS}}</td>
+          </tr>
+          <tr>
+            <th scope="row">M</th>
+            <td>{{products.widthM}}</td>
+            <td>{{products.heightM}}</td>
+            <td>{{products.sleeveM}}</td>
+            <td>{{products.shoulderM}}</td>
+          </tr>
+          <tr>
+            <th scope="row">L</th>
+            <td>{{products.widthL}}</td>
+            <td>{{products.heightL}}</td>
+            <td>{{products.sleeveL}}</td>
+            <td>{{products.shoulderL}}</td>
+          </tr>
+          <tr>
+            <th scope="row">XL</th>
+            <td>{{products.widthXL}}</td>
+            <td>{{products.heightXL}}</td>
+            <td>{{products.sleeveXL}}</td>
+            <td>{{products.shoulderXL}}</td>
+          </tr>
+        </tbody>
+    </table>
+                     
+           
+
+<script src="{%static 'vendor/jquery/jquery-3.2.1.min.js'%}"></script>
+
+	<script src="{%static 'vendor/animsition/js/animsition.min.js'%}"></script>
+
+	<script src="{%static 'vendor/bootstrap/js/popper.js'%}"></script>
+	<script src="{%static 'vendor/bootstrap/js/bootstrap.min.js'%}"></script>
+
+	<script src="{%static 'vendor/select2/select2.min.js'%}"></script>

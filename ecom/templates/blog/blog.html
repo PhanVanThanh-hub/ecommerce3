@@ -72,13 +72,18 @@
 						{% endfor%}
 						<!-- Pagination -->
 						<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-							<a href="#" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								1
+							{% if blogs.has_previous %}
+								<a href="?page=1"  class="flex-c-m how-pagination1 trans-04 m-all-7">1</a>
+								<a href="?page={{ blogs.previous_page_number }}"  class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+									{{blogs.previous_page_number}}
+								</a>
+							{% endif %}
+							{% if blogs.has_next %}
+							<a  href="?page={{ blogs.next_page_number }}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+								{{blogs.next_page_number}}
 							</a>
-
-							<a href="#" class="flex-c-m how-pagination1 trans-04 m-all-7">
-								2
-							</a>
+							{% endif %}
+							 
 						</div>
 					</div>
 					 

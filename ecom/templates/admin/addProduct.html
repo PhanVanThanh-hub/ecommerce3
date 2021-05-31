@@ -5,8 +5,8 @@
 <link rel="stylesheet"  type="text/css" href="{% static 'plugins/fontawesome-free/css/all.min.css'%} ">
 
 <link rel="stylesheet"   type="text/css" href="{% static 'dist/css/adminlte.min.css'%}">
-<div class="content-wrapper">
-<section class="content">
+
+ 
     <div class="row">
       <div class="col-md-6">
         <div class="card card-primary">
@@ -21,26 +21,44 @@
           </div>
           <div class="card-body">
             <div class="form-group">
-              <form action="" method="POST"enctype="multipart/form-data">
+              <form action="" id="createProduct" method="POST"enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_ul }}
-                <input type="submit" value="Submit">
-             </form>
-              <input type="text" id="inputName" class="form-control">
+                <a onclick="submitFormCreateProduct()" class="button-primary mt-5" type="submit">Create</a>
+             </form> 
             </div>
           </div>
           <!-- /.card-body -->
         </div>
         <!-- /.card -->
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <a href="#" class="btn btn-secondary">Cancel</a>
-        <input type="submit" value="Create new Porject" class="btn btn-success float-right">
+      <div class="col-md-6">
+        <div id="createProduct_Preview">
+            <div class="d-flex justify-content-center align-items-center">
+                <h2 class="display-5 text-danger" style="margin: 200px 0;">Preview</h2>
+            </div>
+        </div>
       </div>
     </div>
-  </section>
-  <!-- /.content -->
-</div>
+  
+<script>
+  function submitFormCreateProduct(){
+    console.log("!2")
+    $.ajax({
+        url: '',
+        type: 'post',
+        data: new FormData(document.getElementById("createProduct")),
+        processData: false,
+        contentType: false,
+        dataType: 'html',
+        success: function (data){
+            $("#createProduct")[0].reset()
+            $("#createProduct_Preview").html(data)
+        }
+    })
+  }
+</script>
  
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{%static 'dist/js/adminlte.min.js'%}"></script>

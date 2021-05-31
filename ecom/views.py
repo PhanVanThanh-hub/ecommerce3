@@ -23,7 +23,7 @@ from dashboard.urls import *
 import json
 import datetime
 from .decorators import unauthenticated_user, allowed_users, admin_only
-from .form import customerForm,changePassWordForm
+from .form import CustomerForm,ChangePassWordForm
 from .utils import cartData,ecommerce3Product
 from .filter import productFilter
 from pay.models import *
@@ -57,12 +57,12 @@ def dashboardPage(request):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def changePassWord(request):
-    form = changePassWordForm()
+    form = ChangePassWordForm()
     customer1 = request.user.customer
     customer = request.user
      
     if request.method == 'POST':
-        form = changePassWordForm(request.POST)     
+        form = ChangePassWordForm(request.POST)     
         if form.is_valid():
             currentPassword = form.cleaned_data.get('currentPassword')
             newPassword = form.cleaned_data.get('newPassword')
@@ -181,28 +181,8 @@ from datetime import timedelta
 def home(request):
     
     print("xL:",request.user.customer.id)
-    LoginAttempts.objects.create(
-        customer=request.user.customer,
-        start=datetime.datetime.now()
-    )
-    #Tang gift voucher
-    gift = giftVoucher.objects.all()[0]
-    a=((gift.dateTimeGift).strftime("%Y%b%d"))
-    b=((datetime.datetime.now()).strftime("%Y%b%d"))
-    print(a)
-    if str(a) == str(b):
-        x = LoginAttempts.objects.all().filter(start>=gift.dateTimeGift).count()
-        if x==1:
-            customer = Customer.objects.get(user = request.user)
-            discount = Discount.objects.get(customer= customer)
-            discount.amount50 = int(discount.amount50)+ int(gift.amount50)
-            discount.amount30 = int(discount.amount30)+ int(gift.amount30)
-            discount.amount20 = int(discount.amount20)+ int(gift.amount20)
-            discount.complete = True
-            discount.save()
-    if gift.dateTimeGift<datetime.datetime.now():
-        gift.delete()
-    #-----------------------------
+     
+     
 
 
     
@@ -325,9 +305,9 @@ def accountSettingPage(request):
     customer =request.user.customer
     item, create = Order.objects.get_or_create(customer=customer)
     order =item.orderitem_set.all()
-    form =customerForm(instance =customer)
+    form =CustomerForm(instance =customer)
     if request.method == 'POST':
-        form = customerForm(request.POST, request.FILES, instance=customer)
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
         if form.is_valid():
             form.save()
 

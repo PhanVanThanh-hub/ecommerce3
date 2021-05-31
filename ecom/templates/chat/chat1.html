@@ -91,7 +91,7 @@
 		<div class="messages">
 			<ul id="chat-log">
 				{% for message in messages%}
-					{% if message.author == request.user %}
+					{% if message.author != request.user %}
 						<li class="sent">
 							<img src="{{author.profile_pic.url}}" alt="" />
 							<p>{{message.content}}||{{message.author}}</p>

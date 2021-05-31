@@ -85,6 +85,12 @@ def processOrder(request):
     #---------------------------------
     #Tinh doanh thu
     incom=Income.objects.all().latest('id')
+    if incom.data_create.month !=datetime.datetime.now().month:
+        Income.objects.create(
+            total_revenue=0,
+            total_cost=0
+        )
+        incom=Income.objects.all().latest('id')
     if incom.data_create.month == datetime.datetime.now().month:  
         incom.total_revenue = float(total) +float(incom.total_revenue)
         incom.save()

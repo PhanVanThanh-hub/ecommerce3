@@ -9,6 +9,7 @@ class giftVoucher(models.Model):
     amout30 = models.IntegerField(null =True,blank=True)
     amout20 = models.IntegerField(null =True,blank=True)
     dateTimeGift = models.DateTimeField()
+    complete = models.BooleanField(default=False)
      
 
     def __str__(self):
