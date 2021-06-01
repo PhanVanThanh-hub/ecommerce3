@@ -79,28 +79,60 @@ def statistics(request):
         for data in data:
             total = total+ data.get_total
         sell.setdefault(product,(total))
-       
-    print(sell)
     #------------------------
 
+
+    #Ty le tang truong moi thang:
+    tyle = Income.objects.all().order_by("-data_create")[:2]
+   
+    revenue=[]
+    for i in tyle:
+        revenue.append(float(i.total_revenue))
+    growl=Income.objects.all().latest('id')
+    per= revenue[1]/100
+    if revenue[1] >revenue[0]:
+        growl.growth_revenue=-round(100.0 -revenue[0]/per, 2) 
+    else:
+        growl.growth_revenue=round(revenue[0]/per-100.0, 2)
+    
+    profit=[]
+    for i in tyle:
+        profit.append(float(i.total_profit()))
+    per= profit[1]/100
+    if profit[1] >profit[0]:
+        growl.growth_profit=-round(100.0 -profit[0]/per, 2) 
+    else:
+        growl.growth_profit=round(profit[0]/per-100.0, 2)
+
+    print("12:",growl.growth_profit,':',growl.growth_revenue)
+    growl.save()
+    #---------------------------
     #doanh thu-von-lai rong
     income = Income.objects.all()
     total_revenue = 0.0
     total_cost =0.0
     total_profit = 0.0
-    for i in income:
+    for i in income: 
         total_revenue += float(i.total_revenue)
         total_cost += float(i.total_cost)
-    total_profit = i.total_profit()
-    #-------------------------
+        total_profit += float(i.total_profit())
 
+    for i in income:
+        i.growth_total_revenue=round(float(i.total_revenue) /float(total_revenue/100),2) 
+        i.growth_total_cost=round(float(i.total_cost) /float(total_cost/100),2) 
+        i.growth_total_profit=round(float(i.total_profit()) /float(total_profit/100),2) 
+        i.save()
+     
+    income = Income.objects.all()
+    #-------------------------
+    #--------------------------
+    
+
+    #--------------------------
     #Bill
     bill = Bill.objects.all()
-    print("bill:",bill)
-    for i in bill:
-        print(i.product,":",i.amount,':',i.cost,':',i.date_create)
     #____________________________
-    context = {'sell':sell,'total_sales':total_sales,'total_customers':total_customers,'total_revenue':total_revenue,'total_cost':total_cost,'total_profit':total_profit}
+    context = {'income':income,'sell':sell,'total_sales':total_sales,'total_customers':total_customers,'total_revenue':total_revenue,'total_cost':total_cost,'total_profit':total_profit}
     return render(request,'admin/statistics.html',context)
 @admin_only
 def addProduct(request):

@@ -14,7 +14,7 @@ from .models import *
 @allowed_users(allowed_roles=['customer'])
 def shopingcartPage(request):
     data      = ecommerce3Product(request)
-    products  = data['products']
+    
     order     = data['order']
     item      = data['item']
     favorite  = data['favorite']
@@ -29,7 +29,7 @@ def shopingcartPage(request):
     customer = request.user.customer
     accumulation = accumulationCard.objects.get(customer = customer)
     context = { 'discount':discount,'accumulation':accumulation,
-                'products':products,'order':order,'item':item,
+                'order':order,'item':item,
                 'favorite':favorite,'sum':sum}
     return render(request, 'pay/shoping_cart.html', context)
 

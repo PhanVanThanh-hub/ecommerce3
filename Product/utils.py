@@ -1,9 +1,8 @@
 import json
 from django.shortcuts import render
 from ecom.models import *
-
 def ecommerce3Product(request):
-    blogs= Blog.objects.all()
+
     products = Product.objects.all()
     customer = request.user.customer
     item,create= Order.objects.get_or_create(customer=customer)
@@ -36,4 +35,4 @@ def ecommerce3Product(request):
     
      
          
-    return {'products':products,'order':order,'blogs':blogs,'item':item,'favorite':favorite,'sum':sum}
+    return {'products':products,'order':order,'item':item,'favorite':favorite,'sum':sum}

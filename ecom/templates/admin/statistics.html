@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard 2</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -140,17 +141,18 @@
               </div>
               <!-- ./card-body -->
               <div class="card-footer">
+                <div style="text-align: center;color:red;font-size: 25px;"> <b><span>Total revenue of Me</span></b></div>
                 <div class="row">
-                  <div class="col-sm-3 col-6">
+                  <div class="col-sm-4 col-8">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
+                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 0%</span>
                       <h5 class="description-header">${{total_revenue}}</h5>
                       <span class="description-text">TOTAL REVENUE</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
-                  <div class="col-sm-3 col-6">
+                  <div class="col-sm-4 col-8">
                     <div class="description-block border-right">
                       <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span>
                       <h5 class="description-header">${{total_cost}}</h5>
@@ -158,20 +160,66 @@
                     </div>
 
                   </div>
-                  <div class="col-sm-3 col-6">
+                  <div class="col-sm-4 col-8">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
+                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 0%</span>
                       <h5 class="description-header">${{total_profit}}</h5>
                       <span class="description-text">TOTAL PROFIT</span>
                     </div>
                   </div>
-                  <div class="col-sm-3 col-6">
-                    <div class="description-block">
-                      <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span>
-                      <h5 class="description-header">1200</h5>
-                      <span class="description-text">GOAL COMPLETIONS</span>
+                  
+                </div>
+
+
+                <!-- Doanh thu moi thang -->
+                <div> 
+                  {% for i in income%}
+                  <div style="text-align: center;color:red;font-size: 25px;"> <b><span  >{{i.data_create.year}}-{{i.data_create.month}}</span></b></div>
+                <div class="row">
+                    
+                  <div class="col-sm-4 col-8">
+                    <div class="description-block border-right">
+                      {% if i.growth_revenue > 0 %}
+                          <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>  {{i.growth_revenue}}</span>
+                        {%elif i.growth_revenue == 0%}
+                          <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> {{i.growth_revenue}}</span>
+                        {%else%}
+                          <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> {{i.growth_revenue}}</span>
+                      {% endif%}
+                        <h5 class="description-header">${{i.total_revenue}}</h5>
+                      <span class="description-text">TOTAL REVENUE<span class="badge badge-info">{{i.growth_total_revenue}}%</span></span>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-4 col-8">
+                    <div class="description-block border-right">
+                      <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span>
+                      <h5 class="description-header">${{i.total_cost}}</h5>
+                      <span class="description-text">TOTAL COST<span class="badge badge-info">{{i.growth_total_cost}}%</span></span>
+                    </div>
+
+                  </div>
+                  <!--  -->
+                  <div class="col-sm-4 col-8">
+                    <div class="description-block border-right">
+                      {% if i.growth_profit > 0 %}
+                          <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> {{i.growth_profit}}</span>
+                        {%elif i.growth_profit == 0%}
+                          <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> {{i.growth_profit}}</span>
+                        {%else%}
+                          <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> {{i.growth_profit}}</span>
+                      {% endif%}
+                       <h5 class="description-header">${{i.total_profit}}</h5>
+                      <span class="description-text">TOTAL PROFIT<span class="badge badge-info">{{i.growth_total_profit}}%</span></span>
+                       
                     </div>
                   </div>
+                  <!--  -->
+                   
+
+                </div>
+                {%endfor%}
                 </div>
 
               </div>

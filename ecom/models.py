@@ -29,7 +29,12 @@ class Income(models.Model):
     total_cost = models.DecimalField(max_digits=8,null=True,decimal_places=2) 
      
     data_create = models.DateTimeField(auto_now_add=True,null=True,blank=True)
-
+    growth_revenue=models.FloatField(null=True,default=0.0)
+    growth_cost=models.FloatField(null=True,default=0.0)
+    growth_profit=models.FloatField(null=True,default=0.0)
+    growth_total_revenue=models.FloatField(null=True,default=0.0)
+    growth_total_cost=models.FloatField(null=True,default=0.0)
+    growth_total_profit=models.FloatField(null=True,default=0.0)
     def __str__(self):
         return str(self.data_create.year)+str("-") + str(self.data_create.month)
 
