@@ -315,15 +315,7 @@
     
     /*==================================================================
     [ Show modal1 ]*/
-    $('.js-show-modal1').on('click',function(e){
-        e.preventDefault();
-        
-        $('.js-modal1').addClass('show-modal1');
-    });
-
-    $('.js-hide-modal1').on('click',function(){
-        $('.js-modal1').removeClass('show-modal1');
-    });
+     
 
 
 
@@ -524,27 +516,27 @@ function addFavorite2(productId,action){
 
 /*==================================================================
 [ quickView ]*/
-var quickBtn= document.getElementsByClassName("quickView")
-for(i=0;i<quickBtn.length;i++){
+// var quickBtn= document.getElementsByClassName("quickView")
+// for(i=0;i<quickBtn.length;i++){
    
-    quickBtn[i].addEventListener('click',function(){
-        productId = this.dataset.product
-        console.log("lalalala",productId)
-        $.ajax({
+//     quickBtn[i].addEventListener('click',function(){
+//         productId = this.dataset.product
+//         console.log("lalalala",productId)
+         
+//         $.ajax({
+//             url:'/quickView/',
+//             type : "POST", 
+//             data : { 'productId':productId }, 
+//             dataType: "html",
+//             headers:{
+//                 'X-CSRFToken':csrftoken,
+//             },
+//             success : function(data) {
+                
+//                 console.log("success"); // another sanity check
+//                 $('#myBtn').html(data)
+//             },
             
-            type : "POST", 
-            data : { 'productId':productId }, 
-            dataType: "json",
-            headers:{
-                'X-CSRFToken':csrftoken,
-            },
-            success : function(json) {
-                console.log(json); // log the returned json to the console
-                console.log("success"); // another sanity check
-                console.log("data:",json.product)
-                $('#list-wrapper').html()
-            },
-            
-        });
-    })
-}
+//         });
+//     })
+// }

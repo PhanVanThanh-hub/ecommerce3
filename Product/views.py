@@ -79,3 +79,13 @@ def productPage(request):
     print("productL:",products)
     context = {"products": products_paged,'order':order,'item':item,'favorite':favorite,'sum':sum, 'tag':tag,'type':type}
     return render(request, 'product/product.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def quickView(request):
+    if request.is_ajax():
+        id = request.POST.get('productId')
+        product= Product.objects.get(id=id)
+        context={'product':product}
+        print("id:",id)
+        return render(request,'product/quickView.html',context)

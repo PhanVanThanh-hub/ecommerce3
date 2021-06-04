@@ -248,5 +248,29 @@ def addBlog(request):
 
     return render(request,'admin/addBlog.html',context)
 
-
+@admin_only
+def chat(request):
+    author = request.user.username
+    print("author:L",type(author))
+    # roomName = slug
+    # id =User.objects.get(username =roomName )
+    # room =Room.objects.get(nameRoom = id)
+    # messages = Message.last_10_messages(room)
+    # for mesage in messages:
+    #     print("s:",str(mesage))
+    #     if str(mesage) == "admin":
+    #         print("1:",mesage.author)
+    #     else:
+    #         print("ngu")
+    #admin hay not
+    a = str(author)
+    b=Room.objects.all().order_by('-timestamp') 
+    #---------------------
+    context = { 'b':b ,
+                # 'room_name_json':mark_safe(json.dumps(slug)),
+                # 'username':mark_safe(json.dumps(request.user.username))
+                }
+    if request.is_ajax():
+        print("hpla")
+    return render(request, 'chat/chat2.html',context)
  

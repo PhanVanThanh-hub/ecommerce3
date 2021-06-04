@@ -1,0 +1,66 @@
+{% load static%}
+
+{% for i in b%}
+			<ul>
+				<li class="contact chathehe" data-room="{{i.nameRoom}}">
+					<div href ="#"class="wrap  " >
+						{% if i.onl %}
+								<span class="contact-status online" data-name="{{i.nameRoom}}"></span>
+							{%else%}
+								<span class="contact-status busy" data-name="{{i.nameRoom}}"></span>
+						{% endif%}
+						<img src="{{i.customer.profile_pic.url}}" alt="" />
+						<div class="meta">
+                             
+							<p class="name">{{i.customer}} </p>
+							<p class="preview">{{i.content}}||{{i.timestamp}}</p>
+						</div>
+					</div>
+				</li>
+				 
+			</ul>
+{% endfor%}
+<script>
+    $( "button" ).click(function() {
+      $( "div" ).each(function( index, element ) {
+        // element == this
+        $( element ).css( "backgroundColor", "yellow" );
+        if ( $( this ).is( "#stop" ) ) {
+          $( "span" ).text( "Stopped at div index #" + index );
+          return false;
+        }
+      });
+    });
+</script>
+<script>
+    var  addAction= document.getElementsByClassName("contact")
+    var  addFavorite= document.getElementsByClassName("chathehe")
+        for(i=0;i<addFavorite.length;i++){
+			 
+          
+            addFavorite[i].addEventListener('click',function(){    
+                var a =this.dataset.room
+                var url=a+'/'
+                var lo=12  
+                $.ajax({
+                    type: "POST", 
+                    url: url,
+                    data: {'lo':2},
+                     
+                    processData: false,
+                    contentType: false,
+                    dataType: 'html',
+                    headers:{
+                        'X-CSRFToken':csrftoken,
+                    },
+                    success: function (data) {
+                         
+                        
+                        $("#chat_with_user").html(data)
+                    }
+                });
+                }
+            )
+     
+        }
+</script>

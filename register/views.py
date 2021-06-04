@@ -32,7 +32,7 @@ def registerPage(request):
                 user = form.save()
                 group = Group.objects.get(name='customer')
                 user.groups.add(group)
-                Customer.objects.create(
+                customer=Customer.objects.create(
                     user=user,
                     name = username,
                     email = email,  
@@ -40,7 +40,7 @@ def registerPage(request):
                 )
 
                 #Tao room
-                room = Room.objects.create(nameRoom = user)
+                room = Room.objects.create(nameRoom = user,customer=customer)
                 Message.objects.create(room = room,author =user)
                  
                 #-----------------

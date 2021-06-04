@@ -180,13 +180,6 @@ from datetime import timedelta
 @allowed_users(allowed_roles=['customer'])
 def home(request):
     
-    print("xL:",request.user.customer.id)
-     
-     
-
-
-    
-    
     
     data      = ecommerce3Product(request)
     products  = data['products']
@@ -203,15 +196,6 @@ def home(request):
     sum2 = len(Product.TYPE)
     for i in range(sum2):
         type[i]= Product.TYPE[i][1]
-    print("sum2:",tag)
-
-    if request.is_ajax():
-        print('dmm')
-        productId=request.POST.get('productId')
-        product = Product.objects.filter(id = productId)
-        product = serializers.serialize('json', product)
-        return JsonResponse({'product':product },safe=False)
-
     context = { 'products':products,'order':order,'item':item,'favorite':favorite,'sum':sum,'tag':tag,'type':type}
     return render(request, 'pages/index.html', context)
 

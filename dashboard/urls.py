@@ -12,4 +12,5 @@ urlpatterns = [
     path('upDataProduct/', views.upDataProduct, name="upDataProduct"),
     path('giftVoucher/', views.giftVoucher, name="giftVoucher"),
     path('addBlog/', views.addBlog, name="addBlog"),
+    path('chat/', views.chat, name="chat"),
 ]
