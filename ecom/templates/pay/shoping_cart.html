@@ -1,6 +1,8 @@
 {%  extends 'pages/main.html' %}
 
 {% block content %}{% load static%}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+ 
 	<!-- breadcrumb -->
 	<div class="container">
 		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
@@ -126,19 +128,16 @@
 									</span>
 
 									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-										<select class="js-select2" name="time" id="chooseCountry" >
-											<option>Select a country...</option>
-											<option>USA</option>
-											<option>UK</option>
-											<option>VietNam</option>
+										<select class="js-select2" name="country" id="chooseCountry" >
+											
 										</select>
 										<div class="dropDownSelect2"></div>
 									</div>
-
-									<div class="bor8 bg0 m-b-12">
-										<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" id="state" placeholder="State /  country">
+									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
+										<select  class="js-select2" name="state" id="chooseState" >
+										</select>
+										<div class="dropDownSelect2"></div>
 									</div>
-
 									<div class="bor8 bg0 m-b-22">
 										<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" id="postcode" placeholder="Postcode / Zip">
 									</div>
@@ -286,4 +285,5 @@
 	</script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<script src="{%static 'js/pay.js' %}"></script>
+	<script src="{%static 'js/location.js' %}"></script>
 	{% endblock content %}

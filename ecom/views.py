@@ -180,7 +180,7 @@ from datetime import timedelta
 @allowed_users(allowed_roles=['customer'])
 def home(request):
     
-    
+   
     data      = ecommerce3Product(request)
     products  = data['products']
     order     = data['order']
@@ -293,6 +293,7 @@ def accountSettingPage(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST, request.FILES, instance=customer)
         if form.is_valid():
+            
             form.save()
 
     context = {'form': form,'order':order,'item':item}

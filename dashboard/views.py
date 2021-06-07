@@ -18,15 +18,21 @@ def convert(seconds):
       
     return "%d:%02d:%02d" % (hour, minutes, seconds)
 @admin_only
-def customer(request,pk):
+def customer(request,slug):
  
     #------------------------
-    customer = Customer.objects.get(id = pk)
-    order = DataOrder.objects.get(customer = customer)
-    total = order.get_total_item
+    customer = Customer.objects.get(slug = slug)
+    
+     
     
     #list product bought
-    item = Data.objects.filter(dataOrder= order,complete=True).order_by("-date_complete")
+    try:
+        order = DataOrder.objects.get(customer = customer)
+        total = order.get_total_item
+        item = Data.objects.filter(dataOrder= order,complete=True).order_by("-date_complete")
+    except:
+        total=0
+        item=[]
     #--------------------------
 
 
@@ -69,17 +75,7 @@ def statistics(request):
     total_customers = Customer.objects.all().count()
     #---------------------------
 
-    #Doanh thu cua moi san pham
-    product = Product.objects.all()
-    sell ={}
-    for product in product:
-        data = Data.objects.filter(product = product)
-        total =0.0
-         
-        for data in data:
-            total = total+ data.get_total
-        sell.setdefault(product,(total))
-    #------------------------
+    
 
 
     #Ty le tang truong moi thang:
@@ -132,7 +128,7 @@ def statistics(request):
     #Bill
     bill = Bill.objects.all()
     #____________________________
-    context = {'income':income,'sell':sell,'total_sales':total_sales,'total_customers':total_customers,'total_revenue':total_revenue,'total_cost':total_cost,'total_profit':total_profit}
+    context = {'income':income,'total_sales':total_sales,'total_customers':total_customers,'total_revenue':total_revenue,'total_cost':total_cost,'total_profit':total_profit}
     return render(request,'admin/statistics.html',context)
 @admin_only
 def addProduct(request):
@@ -273,4 +269,84 @@ def chat(request):
     if request.is_ajax():
         print("hpla")
     return render(request, 'chat/chat2.html',context)
+
+
+@admin_only
+def char(request):
+    #Doanh thu cua moi san pham
+    product = Product.objects.all()
+    sell ={}
+    for product in product:
+        data = Data.objects.filter(product = product)
+        total =0.0
+         
+        for data in data:
+            total = total+ data.get_total
+        sell.setdefault(product,(total))
+    #--------------------------------
+
+    #Doanh thu moi thang
+    income = Income.objects.all()
+    context={"sell":sell,'income':income}
+    #------------------------
+
+    #Top khach hang
+    top={}
+    customer = Customer.objects.all()
+    for i in customer:
+        try:  
+            order = DataOrder.objects.get(customer = i)
+        except:
+            print("oh no!")
+        total = order.get_total_item()
+        print("oi:",i.id)
+        top.setdefault(i,(total))
+    
+    top= sorted(top.items(), key=lambda x: x[1], reverse=True)
+    top = top[:10]
+    #-------------------------------------------
+    
+
+    #So luong san pham ban ra
+    amount = {}
+    product = Product.objects.all()
+    for i in product:
+        data= Data.objects.all().filter(product = i)
+        t=0
+        for x in data:
+           t= t+int(x.quantity)
+        amount.setdefault(i,(t))
+    amount= sorted(amount.items(), key=lambda x: x[1], reverse=True)
+    amount = amount[:10]
+
+    #------------------------------------------
+
+    #Khu vuc mua hang
+    shiping =Shiping.objects.all()
+    country1= country.objects.all()
+    address={}
+    for i in country1:
+        if Shiping.objects.all().filter(address=i.name).count()!=0:
+            address.setdefault(i,int(Shiping.objects.all().filter(address=i.name).count()))
+    address= sorted(address.items(), key=lambda x: x[1], reverse=True)
+    address = address[:10]
+    print("address:",address)
+    #------------------------------------------
+    context={"sell":sell,'income':income,'top':top,'amount':amount,'address':address,}
+    return render(request, 'char/char.html',context)
+
+def productAdminDetail(request,slug):
  
+    #------------------------
+    products = Product.objects.get(slug = slug)
+    print("clgt?")
+    context={"products":products}
+    return render(request,'product/ProductPreview.html',context)
+
+@admin_only
+def listCustomer(request):
+    customer = Customer.objects.all()
+    context={'customer':customer}
+    
+    
+    return render(request,"admin/listCustomer.html",context)

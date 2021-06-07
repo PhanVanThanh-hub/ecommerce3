@@ -18,7 +18,7 @@ User = get_user_model()
 def productDetailPage(request,slug):
      
     product = Product.objects.all()
-    products = Product.objects.get(id=slug)
+    products = Product.objects.get(slug=slug)
     data      = ecommerce3Product(request)
     order     = data['order']
     item      = data['item']
@@ -44,10 +44,10 @@ def productDetailPage(request,slug):
                'item':item,'order':order,'favorite':favorite,'sum':sum,
                'comment':comment_paged,
                'author_user':mark_safe(json.dumps(author_user)),
-               'room_name_json':mark_safe(json.dumps(slug)),
+               'room_name_json':mark_safe(json.dumps(products.id)),
                'pic':pic,'countReview':countReview,
                'username':mark_safe(json.dumps(request.user.username))}    
-    print("lolo")
+    print("lolo",mark_safe(json.dumps(slug)))
     return render(request, 'product/product_detail.html', context)
 
 @login_required(login_url='login')
@@ -67,17 +67,16 @@ def productPage(request):
     sum2 = len(Product.TYPE)
     for i in range(sum2):
         type[i]= Product.TYPE[i][1]
-    print("sum2:",tag)
-    paginator = Paginator(products, 5)
-    page = request.GET.get('page', 1)
-    try:
-        products_paged = paginator.page(page)
-    except PageNotAnInteger:
-        products_paged = paginator.page(1)
-    except EmptyPage:
-        products_paged = paginator.page(paginator.num_pages)
-    print("productL:",products)
-    context = {"products": products_paged,'order':order,'item':item,'favorite':favorite,'sum':sum, 'tag':tag,'type':type}
+    
+    # paginator = Paginator(products, 5)
+    # page = request.GET.get('page', 1)
+    # try:
+    #     products_paged = paginator.page(page)
+    # except PageNotAnInteger:
+    #     products_paged = paginator.page(1)
+    # except EmptyPage:
+    #     products_paged = paginator.page(paginator.num_pages)
+    context = {"products": products,'order':order,'item':item,'favorite':favorite,'sum':sum, 'tag':tag,'type':type}
     return render(request, 'product/product.html', context)
 
 @login_required(login_url='login')
@@ -89,3 +88,5 @@ def quickView(request):
         context={'product':product}
         print("id:",id)
         return render(request,'product/quickView.html',context)
+
+ 

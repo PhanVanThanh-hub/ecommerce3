@@ -40,7 +40,7 @@ import datetime
 def processOrder(request):
     data = json.loads(request.body)
     address = data['shippingInfo']['address']
-    state = data['shippingInfo']['state']
+    state1 = data['shippingInfo']['state']
     zipcode = data['shippingInfo']['zipcode']
     total = data['total']
     if request.user.is_authenticated:
@@ -48,11 +48,17 @@ def processOrder(request):
     order= Order.objects.get(customer=customer)
     total = order.get_total_item()
     print("Taotal,",total)
+    c =country.objects.get(name=address)
+    state.objects.get_or_create(country=c,
+                                name=state1
+    )
+    
+    dataOrder ,create= DataOrder.objects.get_or_create(customer = customer)
     Shiping.objects.create(
         customer =customer,
-        order = order,
+        data = dataOrder,
         address = address,
-        state= state,
+        state= state1,
         zipcode = zipcode
     )
 
@@ -61,7 +67,7 @@ def processOrder(request):
     dataDiscount = 0
     if order.discount !=1:
         dataDiscount =float(1)-float(order.discount)
-    dataOrder ,create= DataOrder.objects.get_or_create(customer = customer)
+     
     for item in orderItem:
         Data.objects.create(
             dataOrder=dataOrder,

@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime  
+from django.template.defaultfilters import slugify
+from django.urls import reverse
+
 # Create your models here.
 class Customer(models.Model):
     user = models.OneToOneField(User, null =True,blank=True, on_delete=models.CASCADE)
@@ -9,10 +12,20 @@ class Customer(models.Model):
     email = models.CharField(max_length=200,null=True)
     profile_pic = models.ImageField(default="null" ,null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True,null=True)
-
+    slug=models.SlugField(max_length=2000)
 
     def __str__(self):
         return self.name
+    def get_absolute_url(self):
+        return reverse('dashboard:customer', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):  # new
+        print("jool")
+        self.slug = slugify(self.name)
+        if not self.slug:
+            print("o kia men")
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
 
 class oldPassWord(models.Model):
     customer = models.ForeignKey(Customer, null =True,blank=True, on_delete=models.CASCADE)
@@ -40,6 +53,29 @@ class Income(models.Model):
 
     def total_profit(self):
         return self.total_revenue-self.total_cost
+
+
+def create_slug(title):  # new
+    slug = slugify(title)
+    qs = Product.objects.filter(slug=slug)
+    if qs:
+        exists = qs.exists()
+        if exists:
+            slug = "%s-%s" % (slug, qs.first().id)
+    return slug     
+class Category(models.Model):
+    name = models.CharField(max_length=2000)
+    slug = models.SlugField(max_length=2000)
+    def __str__(self) -> str:
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('product:category', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs) 
 class Product(models.Model):
     TYPE = (
         ('Men', 'Men'),
@@ -97,7 +133,18 @@ class Product(models.Model):
     shoulderXXL = models.FloatField(null=True)
     amout = models.IntegerField(default= 100,null=True, blank=True)
     cost = models.DecimalField(default=30.0,max_digits=8,null=True,decimal_places=2)
+    slug = models.SlugField(max_length=2000)
 
+    def get_absolute_url(self):
+        return reverse('Product:product_detail', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):  # new
+        print("jool")
+        self.slug = slugify(self.name)
+        if not self.slug:
+            print("o kia men")
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
 
     def tag1(self):
         return self.TAGS
@@ -213,7 +260,7 @@ class Data(models.Model):
 
 class Shiping(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True )
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    data = models.ForeignKey(DataOrder, on_delete=models.SET_NULL, null=True)
     address = models.CharField(max_length=200, null=False)
     state = models.CharField(max_length=200, null=False)
     zipcode = models.CharField(max_length=200, null=False)

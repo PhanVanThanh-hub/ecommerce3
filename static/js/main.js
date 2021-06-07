@@ -328,7 +328,7 @@ for(i=0;i<addBtn.length;i++){
     addBtn[i].addEventListener('click',function(){
         productId = this.dataset.product
         action = this.dataset.action
-        temp = addBtn[i].value
+        
         x=0 
         amount = this.dataset.amount
         console.log("ss:L",typeof(amount))

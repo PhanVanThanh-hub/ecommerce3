@@ -1,0 +1,32 @@
+{%  extends 'admin/mainadmin.html' %}
+
+{% block content %}
+
+ 
+<div class="col-md-12">
+    <h5>CUSTOMERS:</h5>
+    <hr>
+    <div class="card card-body">
+        <a class="btn btn-primary  btn-sm btn-block" href="">Customer</a>
+        <table class="table table-bordered">
+            <tr>
+                <th></th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Date Create</th>
+            </tr>
+            {% for customer in customer %}
+            <tr>
+                <th style="text-align: center;"><img class="profile-pic" style="border-radius: 50%;width: 50px;height: 50px;" src="{{customer.profile_pic.url}}"></th>
+                <th><a href="{{customer.get_absolute_url}}">{{customer.name}}</a></th>
+                <th>{{customer.phone}}</th>
+                <th>{{customer.email}}</th>
+                <th>{{customer.date_created}}</th>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+</div>
+{% endblock %}

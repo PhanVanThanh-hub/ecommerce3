@@ -21,7 +21,7 @@
 						</div>
 
 						<div class="header-cart-item-txt p-t-8">
-							<a href="{% url 'Product:productDetail' item.product.id  %}" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+							<a href="{{item.product.get_absolute_url}}" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
 								{{item.product.name}} 
 							</a>
 						</div>

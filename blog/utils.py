@@ -3,9 +3,9 @@ from django.shortcuts import render
 from ecom.models import *
 from blog.models import *
 
-def cartData(request,pk):
+def cartData(request,slug):
     products = Product.objects.all()
-    blogs = Blog.objects.get(id=pk)
+    blogs = Blog.objects.get(slug=slug)
     customer = request.user.customer
     item, create = Order.objects.get_or_create(customer=customer)
     favorite1 ,create = Favorite.objects.get_or_create(customer= customer)

@@ -19,7 +19,7 @@
 						{% for blog in blogs%}
 						<!-- item blog -->
 						<div class="p-b-63">
-							<a href="{% url 'blog:blog-detail' blog.id  %} " class="hov-img0 how-pos5-parent">
+							<a href="{{blog.get_absolute_url}} " class="hov-img0 how-pos5-parent">
 								<img src="{{blog.imageURL}}" alt="IMG-BLOG">
 
 								<div class="flex-col-c-m size-123 bg9 how-pos5">
@@ -35,7 +35,7 @@
 
 							<div class="p-t-32">
 								<h4 class="p-b-15">
-									<a href="{% url 'blog:blog-detail' blog.id  %} " class="ltext-108 cl2 hov-cl1 trans-04">
+									<a href="{{blog.get_absolute_url}} " class="ltext-108 cl2 hov-cl1 trans-04">
 										{{blog.name}} 
 									</a>
 								</h4>
@@ -52,7 +52,7 @@
 										</span>
 
 										<span>
-											{{blog.tag}},{{blog.categories}}
+											{{blog.category}}
 											<span class="cl12 m-l-4 m-r-6">|</span>
 										</span>
 
@@ -61,7 +61,7 @@
 										</span>
 									</span>
 
-									<a href="{% url 'blog:blog-detail' blog.id  %} " class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
+									<a href="{{blog.get_absolute_url}}" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
 										Continue Reading
 
 										<i class="fa fa-long-arrow-right m-l-9"></i>

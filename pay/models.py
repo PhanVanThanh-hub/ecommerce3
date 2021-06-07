@@ -22,5 +22,19 @@ class accumulationCard(models.Model):
     def __str__(self):
         return self.customer.name
 
+class country(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class state(models.Model):
+    country=models.ForeignKey(country, on_delete=models.SET_NULL,null=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.country.name
+
 
  

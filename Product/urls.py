@@ -3,7 +3,8 @@ from django.urls import path
 app_name='Product'
     
 urlpatterns = [
-    path('productDetail/<slug:slug>/',views.productDetailPage,name='productDetail'),
+    path('product/<slug:slug>/',views.productDetailPage,name='product_detail'),
     path('product/',views.productPage,name='product'),
     path('quickView/',views.quickView,name='quickView'),
+   
 ]

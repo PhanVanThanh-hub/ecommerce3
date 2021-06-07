@@ -50,9 +50,10 @@ function submitFormData(totalDjango){
             'zipcode': null,
     }
     var total= document.getElementById("total").getAttribute('value');
-    var address = document.getElementById("chooseCountry").value;
+    var address = document.getElementById("select2-chooseCountry-container").title; 
+    var state = document.getElementById("select2-chooseState-container").title;
     shippingInfo.address = address	
-    shippingInfo.state = document.getElementById("state").value ;
+    shippingInfo.state = state
     shippingInfo.zipcode = document.getElementById("postcode").value;
     userFormData.name = user
     console.log('ShippingInfo:' , shippingInfo)
@@ -111,3 +112,5 @@ function exchange(discount){
      
 }
 //----------------------------------------------------------
+
+ 

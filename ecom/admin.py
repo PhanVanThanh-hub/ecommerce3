@@ -15,3 +15,7 @@ admin.site.register(Comment)
 admin.site.register(LoginAttempts)
 admin.site.register(Income)
 admin.site.register(Bill)
+# class ClientAdmin(admin.ModelAdmin):
+#     prepopulated_fields = {'slug': ('name',)}
+
+# admin.site.register(Category, ClientAdmin)

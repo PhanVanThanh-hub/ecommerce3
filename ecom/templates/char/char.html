@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<body>
+<div class="container">
+    <div class="row">
+        <div  class="col-7">
+                <div style="padding-bottom: 50px;"></div>
+                <div id="myPlot"style="width:100%;max-width:900px;"></div> 
+        </div>
+        <div  class="col-5">
+            <div style="text-align: center;"><h4>Top customer</h4> </div> 
+            <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Cost</th>
+                  </tr>
+                </thead>
+                {% for name ,cost in top %}
+                <tbody >
+                  <tr>
+                    <th>{{ forloop.counter }}</th> 
+                    <th><a href="{% url 'dashboard:customer' name.id %}">{{name}}</a></th>
+                    <td>{{cost}} $</td>
+                  </tr>
+                  </tr>
+                </tbody>
+                {% endfor%}
+              </table>
+        </div>
+    </div>
+    </br>    
+    <div class="row">
+      <div  class="col-7">
+              <div style="padding-bottom: 50px;"></div>
+              <div id="myPlot1"style="width:100%;max-width:900px;"></div> 
+      </div> 
+      <div  class="col-5">
+          <div style="text-align: center;"><h4>Top Product</h4> </div> 
+          <table class="table table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Quantity</th>
+                </tr>
+              </thead>
+              {% for name ,cost in amount %}
+              <tbody>
+                <tr>
+                  <th>{{ forloop.counter }}</th> 
+                  <th><a href="{% url 'dashboard:productAdminDetail' name.slug %}">{{name}}</a></th>
+                  <td>{{cost}}</td>
+                </tr>
+                </tr>
+              </tbody>
+              {% endfor%}
+            </table>
+      </div>
+  </div>
+  <div >
+    <div class="row">    
+        <div class="row">
+            <canvas class="col-8"  id="myChart" style="width:100%;max-width:800px"></canvas>
+            <div class="col-4">3</div>
+        </div>
+    </div>
+</div>
+<div id="myPlot2" style="width:100%;max-width:700px"></div>
+</div>
+<script>  
+    var xArray = [];
+    var yArray = [];
+    {% for name ,x in sell.items %}
+        xArray.push("{{name}}");
+        yArray.push({{x}});
+    {% endfor%}
+    console.log("x:",xArray)
+    console.log("y:",yArray)
+    var layout = {title:"Revenue Per Product"};
+
+    var data = [{labels:xArray, values:yArray, type:"pie"}];
+
+    Plotly.newPlot("myPlot", data, layout);
+</script>
+<script>
+    var xMonth = [];
+    var profit =[];
+    var cost=[];
+    var revenue=[];
+    {% for i in income%}
+        xMonth.push("{{i.data_create.year}}-{{i.data_create.month}}");
+        profit.push({{i.total_profit}});
+        cost.push({{i.total_cost}});
+        revenue.push({{i.total_revenue}});
+    {%endfor%}
+    new Chart("myChart", {
+      type: "line",
+      data: {
+        labels: xMonth,
+        datasets: [{ 
+          data: profit,
+          borderColor: "red",
+          fill: false,
+          label: 'Profit',
+        }, { 
+          data: cost,
+          borderColor: "green",
+          fill: false,
+          label: 'Cost',
+        }, { 
+          data: revenue,
+          borderColor: "blue",
+          fill: false,
+          label: 'Revenue',
+        }]
+      },
+      options: {
+        legend: {display: true}
+      }
+    });
+</script>
+<script>  
+  var xArray = [];
+  var yArray = [];
+  {% for name ,x in amount %}
+      xArray.push("{{name}}");
+      yArray.push({{x}});
+  {% endfor%}
+  console.log("x:",xArray)
+  console.log("y:",yArray)
+  var layout = {title:"Amount Per Product"};
+
+  var data = [{labels:xArray, values:yArray, type:"pie"}];
+
+  Plotly.newPlot("myPlot1", data, layout);
+</script> 
+<script>
+  var xArray = [];
+  var yArray = [];
+  {% for name,amount in address%}
+        xArray.push("{{name}}");
+        yArray.push({{amount}});
+  {%endfor%}
+  var data = [{
+    x:xArray,
+    y:yArray,
+    type:"bar"
+  }];
+  
+  var layout = {title:"World Wide Wine Production"};
+  
+  Plotly.newPlot("myPlot2", data, layout);
+  </script>
+</body>
+</html>
+ 
+ 
