@@ -13,7 +13,9 @@ urlpatterns = [
     path('giftVoucher/', views.giftVoucher, name="giftVoucher"),
     path('addBlog/', views.addBlog, name="addBlog"),
     path('chat/', views.chat, name="chat"),
-    path('char/', views.char, name="char"),
+    path('statistics/char/', views.char, name="char"),
     path('productAdminDetail/<slug:slug>/',views.productAdminDetail,name='productAdminDetail'),
     path('customer/',views.listCustomer,name='listCustomer'),
+    path('statistics/char/customer', views.charCustomer, name="charCustomer"),
+
 ]

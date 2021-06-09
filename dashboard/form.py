@@ -7,7 +7,7 @@ class AddProductForm(ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
-        exclude= ['priceFilter']
+        exclude= ['priceFilter','sold']
         widgets = {
             'all': Textarea(attrs={'cols': 80, 'rows': 20}),
         }

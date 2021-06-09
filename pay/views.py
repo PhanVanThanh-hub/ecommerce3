@@ -78,6 +78,10 @@ def processOrder(request):
             color = item.color,
             discount= dataDiscount
         ) 
+        product = Product.objects.get(name=item.product)
+        product.sold= product.sold + int(item.quantity)
+        product.save()
+        print("itemProduct:",item.product,'|str:',str(item.product))
         orderItem.delete()
         print("ok")
     #---------------------------------

@@ -42,12 +42,13 @@ def customer(request,slug):
     date_and_time = datetime.datetime(1, 1, 1, 0, 0, 0)
     for i in login:
         t =  i.end -i.start 
+        
         if  t.days== -1:
             i.delete()
         date_and_time = date_and_time +t
     total_time = str(date_and_time.hour)+"h:"+str(date_and_time.minute)+"min:"+str(date_and_time.second)+"second"
     averageTime =date_and_time.hour*3600+date_and_time.minute*60+date_and_time.second
-    averageTime = averageTime/3
+    averageTime = averageTime/times
     averageTime = convert(averageTime) 
     print(averageTime)
     #----------------------------
@@ -296,11 +297,11 @@ def char(request):
     for i in customer:
         try:  
             order = DataOrder.objects.get(customer = i)
+            total = order.get_total_item()
+            top.setdefault(i,(total))
         except:
             print("oh no!")
-        total = order.get_total_item()
-        print("oi:",i.id)
-        top.setdefault(i,(total))
+         
     
     top= sorted(top.items(), key=lambda x: x[1], reverse=True)
     top = top[:10]
@@ -330,7 +331,6 @@ def char(request):
             address.setdefault(i,int(Shiping.objects.all().filter(address=i.name).count()))
     address= sorted(address.items(), key=lambda x: x[1], reverse=True)
     address = address[:10]
-    print("address:",address)
     #------------------------------------------
     context={"sell":sell,'income':income,'top':top,'amount':amount,'address':address,}
     return render(request, 'char/char.html',context)
@@ -350,3 +350,9 @@ def listCustomer(request):
     
     
     return render(request,"admin/listCustomer.html",context)
+
+@admin_only
+def charCustomer(request):
+    print("hi Phan Van Thanh")
+    context={}
+    return render(request, 'char/charCustomer.html',context)

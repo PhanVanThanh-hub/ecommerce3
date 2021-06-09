@@ -9,8 +9,10 @@ from .decorators import  allowed_users
  
 from .utils import ecommerce3Product
 from django.contrib.auth import get_user_model
-
+from .form import *
 User = get_user_model()
+from django.db.models import Q
+
 
 # Create your views here.
 @login_required(login_url='login')
@@ -76,7 +78,33 @@ def productPage(request):
     #     products_paged = paginator.page(1)
     # except EmptyPage:
     #     products_paged = paginator.page(paginator.num_pages)
-    context = {"products": products,'order':order,'item':item,'favorite':favorite,'sum':sum, 'tag':tag,'type':type}
+    form = searchProduct()
+    context = {'form':form,"products": products,'order':order,'item':item,'favorite':favorite,'sum':sum, 'tag':tag,'type':type}
+
+    
+    if request.is_ajax():
+        form = searchProduct(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            products=Product.objects.filter(Q(name__icontains=name))
+            print("proudcts:",products)
+        else : 
+            print("hi")
+            a=request.POST.get('e')
+            print("a:",a)
+            if str(a)=="low_to_high":
+                products = Product.objects.all().filter().order_by("price")
+            elif str(a)=="high_to_low":
+                products = Product.objects.all().filter().order_by("-price")
+            elif str(a)=="default":
+                products = Product.objects.all()
+            elif str(a)=="popularity":
+                products = Product.objects.all().filter().order_by("-sold")
+            elif str(a)=="average_rating":
+                products = Product.objects.all().filter().order_by("-rate")
+        context = {"products": products,'order':order,'item':item,'favorite':favorite,'sum':sum, 'tag':tag,'type':type}
+        return render(request, 'product/productAjax.html', context)
+    
     return render(request, 'product/product.html', context)
 
 @login_required(login_url='login')
@@ -89,4 +117,25 @@ def quickView(request):
         print("id:",id)
         return render(request,'product/quickView.html',context)
 
- 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def productSortBy(request,slug):
+    data      = ecommerce3Product(request)
+    
+    order     = data['order']
+    item      = data['item']
+    favorite  = data['favorite']
+    sum       = data['sum']
+    sum1 = len(Product.TAGS)
+    tag ={}
+    for i in range(sum1):
+        tag[i]= Product.TAGS[i][1]
+    type ={}
+    sum2 = len(Product.TYPE)
+    for i in range(sum2):
+        type[i]= Product.TYPE[i][1]
+    if slug==low_to_hight:
+        products= Product.objects.all().order_by("price")
+
+    context = {"products": products,'order':order,'item':item,'favorite':favorite,'sum':sum, 'tag':tag,'type':type}
+    return render(request, 'product/product.html', context)

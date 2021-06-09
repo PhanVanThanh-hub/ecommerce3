@@ -101,7 +101,7 @@ class Product(models.Model):
         ('XXL', 'XXL'),
     )
     name     = models.CharField(max_length=200,null=True)
-    priceFilter    = models.IntegerField(   null=True)
+    priceFilter    = models.IntegerField( default=0,null=True)
     price    = models.DecimalField(max_digits=8,null=True,decimal_places=2)
     favorite = models.CharField(max_length=200, default=0,null=True,blank=True)
     type     = models.CharField(max_length=200,null=True,choices=TYPE)
@@ -131,9 +131,11 @@ class Product(models.Model):
     heightXXL   = models.FloatField(null=True)
     sleeveXXL   = models.FloatField(null=True)
     shoulderXXL = models.FloatField(null=True)
+    rate = models.DecimalField(default=1.0,decimal_places=2,max_digits=3)
     amout = models.IntegerField(default= 100,null=True, blank=True)
     cost = models.DecimalField(default=30.0,max_digits=8,null=True,decimal_places=2)
     slug = models.SlugField(max_length=2000)
+    sold = models.IntegerField(default=0,null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('Product:product_detail', kwargs={'slug': self.slug})
@@ -278,6 +280,9 @@ class Comment(models.Model):
     rate = models.DecimalField(default=1.0,decimal_places=2,max_digits=3)
     def __str__(self):
         return self.customer.name
+
+    def getRating(self):
+        return int(self.rate)
 
 
 class LoginAttempts(models.Model):

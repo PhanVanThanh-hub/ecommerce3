@@ -223,15 +223,7 @@
 
 
     /*==================================================================
-    [ Chat ]*/
-    $('.js-show-chat').on('click',function(){
-        console.log("1")
-        $('.js-panel-chat').addClass('show-header-chat');
-        console.log("2")
-    });
-    $('.js-hide-chat').on('click',function(){
-        $('.js-panel-chat').removeClass('show-header-chat');
-    });
+    
 
     /*==================================================================
     [ Cart ]*/
@@ -297,6 +289,8 @@
             var index = item.index(this);
             rated = index;
             $(input).val(index+1);
+            $('.dis-none').attr('data-rating',rated+1);
+            console.log("hello:",rated)
         });
 
         $(this).on('mouseleave', function(){

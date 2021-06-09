@@ -33,10 +33,11 @@ class CmtConsumer(AsyncWebsocketConsumer):
         author = data['form']
         user= data['us']
         roomName = data['roomName']
+        rating = data['rating']
         message = data['message']
         print("33333333:")
         print("55555555:",roomName,':',author,':',message)
-        await self.save(roomName,author,message)
+        await self.save(roomName,author,message,rating)
         print("lala:",author,':',data['pic'])
         pic = data['pic']
         await self.channel_layer.group_send(
@@ -46,6 +47,7 @@ class CmtConsumer(AsyncWebsocketConsumer):
                 'message': message,
                 'author':author,
                 'user':user,
+                'rating':rating,
                 'pic':pic
            
             }
@@ -53,18 +55,31 @@ class CmtConsumer(AsyncWebsocketConsumer):
    
             
     @sync_to_async
-    def save(self,roomName,author,message):
+    def save(self,roomName,author,message,rating):
         product = Product.objects.get(id = roomName)
-        print("pr:",product)
         author = User.objects.filter(username =author )[0]
         author_user = Customer.objects.get(user = author)
-        print("pr1:",author_user)
+        try:
+            comment = Comment.objects.get(product = product,customer = author_user)
+            comment.delete()
+            
+        except:
+            print("oh mene")
         Comment.objects.create(
             product = product ,
             customer = author_user,
             comment  =message,
-            rate = 1.0
+            rate = rating
         )
+         
+        comment = Comment.objects.all().filter( product = product)
+        totalRate = 0.0
+        for i in comment:
+            totalRate = float(totalRate)+ float(i.rate)
+        print("rate:",totalRate,':',comment.count())
+        totalRate = totalRate/ comment.count()
+        product.rate = totalRate
+        product.save()
     # # Receive message from room group
     async def chat_message(self, event):
         print("22222")
@@ -73,12 +88,14 @@ class CmtConsumer(AsyncWebsocketConsumer):
         author = event['author']
         user = event['user']
         pic = event['pic']
+        rating = event['rating']
         print("22222",message ,':',pic)
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
             'author':author,
             'user':user,
+            'rating':rating,
             'pic':pic
         }))
    

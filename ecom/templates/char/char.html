@@ -22,7 +22,7 @@
                 <div id="myPlot"style="width:100%;max-width:900px;"></div> 
         </div>
         <div  class="col-5">
-            <div style="text-align: center;"><h4>Top customer</h4> </div> 
+            <a href="{%url 'dashboard:charCustomer' %}" style="text-align: center;"><h4>Top customer</h4> </a> 
             <table class="table table-dark">
                 <thead>
                   <tr>
@@ -35,7 +35,7 @@
                 <tbody >
                   <tr>
                     <th>{{ forloop.counter }}</th> 
-                    <th><a href="{% url 'dashboard:customer' name.id %}">{{name}}</a></th>
+                    <th><a href="{{name.get_absolute_url}}">{{name}}</a></th>
                     <td>{{cost}} $</td>
                   </tr>
                   </tr>

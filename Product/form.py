@@ -19,6 +19,9 @@ class updataProductForm(forms.Form):
     amout = forms.IntegerField()
 
     cost = forms.FloatField()
+
+class searchProduct(forms.Form):
+    name = forms.CharField()
      
 
      

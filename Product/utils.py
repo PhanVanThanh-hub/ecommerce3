@@ -10,16 +10,17 @@ def ecommerce3Product(request):
     favorite = favorite1.favoriteproduct_set.all()
     order =item.orderitem_set.all()
     for product in products:
-        if product.price<=50 and product.price>0:
-            product.priceFilter= 50
-        if product.price<=100 and product.price>50:
-            product.priceFilter = 100
-        if product.price<=150 and product.price>100:
-            product.priceFilter = 150
-        if product.price<=200 and product.price>150:
-            product.priceFilter = 200
-        if product.price>200:
-            product.priceFilter = 300
+        if product.priceFilter != 0:
+            if product.price<=50 and product.price>0:
+                product.priceFilter= 50
+            if product.price<=100 and product.price>50:
+                product.priceFilter = 100
+            if product.price<=150 and product.price>100:
+                product.priceFilter = 150
+            if product.price<=200 and product.price>150:
+                product.priceFilter = 200
+            if product.price>200:
+                product.priceFilter = 300
     for item2 in favorite:
         for item1 in products:
             if item1.name == item2.product.name:

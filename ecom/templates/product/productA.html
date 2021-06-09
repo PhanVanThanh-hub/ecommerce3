@@ -1,5 +1,6 @@
 {% load static%}
 <!-- Product -->
+
 <div class="bg0 m-t-23 p-b-140">
     <div class="container">
         <div class="flex-w flex-sb-m p-b-52">
@@ -30,13 +31,18 @@
             
             <!-- Search product -->
             <div class="dis-none panel-search w-full p-t-10 p-b-15">
-                <div class="bor8 dis-flex p-l-15">
-                    <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-                        <i class="zmdi zmdi-search"></i>
-                    </button>
-
-                    <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
-                </div>	
+                <form action=""   id="search"     method="POST"enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="bor8 dis-flex p-l-15">
+                        
+                            
+                            <a class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04" onclick="submitFormSearch()"  type="submit">
+                                <i class="zmdi zmdi-search"></i>
+                            </a>
+                            <input name="name" maxlength="1000" id="id_name"id="inputDescription"class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
+                        
+                    </div>
+                </form>	          
             </div>
 
             <!-- Filter -->
@@ -49,37 +55,37 @@
 
                         <ul>
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
+                                <a onclick="myFunction('default')" class="filter-link stext-106 trans-04">
                                     Default
                                 </a>
                             </li>
-
+                            
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
+                                <a onclick="myFunction('popularity')" class="filter-link stext-106 trans-04">
                                     Popularity
                                 </a>
                             </li>
-
+                             
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
+                                <a onclick="myFunction('average_rating')" class="filter-link stext-106 trans-04">
                                     Average rating
                                 </a>
                             </li>
-
+<!--
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
+                                <a onclick="myFunction(3)" class="filter-link stext-106 trans-04 filter-link-active">
                                     Newness
                                 </a>
-                            </li>
+                            </li>   -->
 
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
+                                <a onclick="myFunction('low_to_high')" class="filter-link stext-106 trans-04">
                                     Price: Low to High
                                 </a>
                             </li>
 
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
+                                <a onclick="myFunction('high_to_low')" class="filter-link stext-106 trans-04">
                                     Price: High to Low
                                 </a>
                             </li>
@@ -128,75 +134,6 @@
                             </li>
                         </ul>
                     </div>
-
-                    <div class="filter-col3 p-r-15 p-b-27">
-                        <div class="mtext-102 cl2 p-b-15">
-                            Color
-                        </div>
-
-                        <ul>
-                            <li class="p-b-6">
-                                <span class="fs-15 lh-12 m-r-6" style="color: #222;">
-                                    <i class="zmdi zmdi-circle"></i>
-                                </span>
-
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Black
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <span class="fs-15 lh-12 m-r-6" style="color: #4272d7;">
-                                    <i class="zmdi zmdi-circle"></i>
-                                </span>
-
-                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-                                    Blue
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <span class="fs-15 lh-12 m-r-6" style="color: #b3b3b3;">
-                                    <i class="zmdi zmdi-circle"></i>
-                                </span>
-
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Grey
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <span class="fs-15 lh-12 m-r-6" style="color: #00ad5f;">
-                                    <i class="zmdi zmdi-circle"></i>
-                                </span>
-
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Green
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <span class="fs-15 lh-12 m-r-6" style="color: #fa4251;">
-                                    <i class="zmdi zmdi-circle"></i>
-                                </span>
-
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Red
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <span class="fs-15 lh-12 m-r-6" style="color: #aaa;">
-                                    <i class="zmdi zmdi-circle-o"></i>
-                                </span>
-
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    White
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
                     <div class="filter-col4 p-b-27 filter-tope-group1">
                         <div class="mtext-102 cl2 p-b-15">
                             Tags
@@ -214,50 +151,8 @@
             </div>
         </div>
 
-        <div class="row  isotope-grid">
-            {% for product in products%} 
-             
-            <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{product.type}} {{product.priceFilter}} {{product.tag}}">
-                <div class="block2">
-                    <div class="block2-pic hov-img0">
-                        <img src="{{product.imageURL}}" alt="IMG-PRODUCT">
-
-                        <a   data-product="{{product.id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1 quickView">
-                            Quick View
-                        </a>
-                    </div>
-
-                    <div class="block2-txt flex-w flex-t p-t-14">
-                        <div class="block2-txt-child1 flex-col-l ">
-                            <a href="{{product.get_absolute_url}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                {{product.name}}
-                            </a>
-                            {% if product.amout != 0%}
-                            <span class="stext-105 cl3">
-                                ${{product.price}}USD
-                            </span>
-                            {%else %}
-                            <span class="stext-105 cl3">
-                                ${{product.price}}USD<span class="badge badge-danger">SOLD OUT</span>
-                            </span>
-                            {%endif%}
-
-                        </div>
-
-                        <div class="block2-txt-child2 flex-r p-t-3 ">
-                            <input class="favorite" data-product="{{product.id}}" type="hidden" value="{{product.favorite}}">
-                            <a href="#" data-product="{{product.id}}"   value="{{product.favorite}}" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 add-favorite">
-                                <img class="icon-heart1 dis-block trans-04" src="{% static 'images/icons/icon-heart-01.png' %} " alt="ICON">
-                                <img class="icon-heart2 dis-block trans-04 ab-t-l" src="{% static 'images/icons/icon-heart-02.png' %} " alt="ICON">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             
-            {% endfor %}
-            <br/>
-             
+        <div class="row  isotope-grid sortBy">
+            {%  include 'product/productAjax.html' %}
         </div>
         <!-- Load more -->
       
@@ -300,3 +195,4 @@
 
     </div>
 </div>
+<script  type ="text/javascript" src="{% static 'js/product.js' %} "></script>

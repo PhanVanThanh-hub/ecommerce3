@@ -33,7 +33,7 @@ from pay.models import *
 def dashboardPage(request):
     customer = Customer.objects.all()
     numberUser = customer.count()
-    data = Data.objects.all().filter(complete=True)
+    data = Data.objects.all().filter(complete=True).order_by("-date_complete")
     myFilter = productFilter(request.GET,queryset=data)
     data = myFilter.qs
     date = LoginAttempts.objects.all() 
@@ -196,6 +196,20 @@ def home(request):
     sum2 = len(Product.TYPE)
     for i in range(sum2):
         type[i]= Product.TYPE[i][1]
+    if request.is_ajax():
+        print("hi")
+        a=request.POST.get('e')
+        print("a:",a)
+        if str(a)=="low_to_high":
+            products = Product.objects.all().filter().order_by("price")
+        elif str(a)=="high_to_low":
+            products = Product.objects.all().filter().order_by("-price")
+        elif str(a)=="default":
+            products = Product.objects.all()
+        elif str(a)=="popularity":
+            products = Product.objects.all().filter().order_by("-sold")
+        context = {"products": products,'order':order,'item':item,'favorite':favorite,'sum':sum, 'tag':tag,'type':type}
+        return render(request, 'product/productAjax.html', context)
     context = { 'products':products,'order':order,'item':item,'favorite':favorite,'sum':sum,'tag':tag,'type':type}
     return render(request, 'pages/index.html', context)
 
